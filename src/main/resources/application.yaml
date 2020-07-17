@@ -1,1 +1,7 @@
+holoman:
+  name: Hello holoman
+  how-long: 777
 
+spring:
+  main:
+    allow-bean-definition-overriding: true

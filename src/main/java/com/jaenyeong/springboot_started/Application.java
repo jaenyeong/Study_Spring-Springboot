@@ -1,7 +1,10 @@
 package com.jaenyeong.springboot_started;
 
+import com.jaenyeong.springboot_started.auto_configure.Holoman;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 // @Configuration + @ComponentScan + @EnableAutoConfiguration 과 같음
 // JPA 의존성으로 인해 실행 에러 (database setting 문제)
@@ -22,5 +25,15 @@ public class Application {
 //		SpringApplication application = new SpringApplication(Application.class);
 //		application.setWebApplicationType(WebApplicationType.NONE);
 //		application.run(args);
+	}
+
+	// Runner에 빈 설정과 충돌
+	// 스프링 2.1 버전 이후부터 사고 방지를 위하여 기본적으로 빈 오버라이딩 비활성화가 설정되어 있음
+	@Bean
+	public Holoman holoman() {
+		Holoman holoman = new Holoman();
+		holoman.setName("Noah");
+		holoman.setHowLong(60);
+		return holoman;
 	}
 }

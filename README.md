@@ -53,8 +53,108 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * @Configuration @Repository @Service @Controller @RestController
 * @EnableAutoConfiguration (Auto Configure - 메타 파일 스캔)
   * spring.factories
-    * org.springframework.boot.autoconfigure.EnableAutoConfiguration
+    * ```
+      org.springframework.boot.autoconfigure.EnableAutoConfiguration\
+      FQCN, \
+      FQCN
+      ```
       * 하위에 있는 설정(자바) 파일들을 스캔 (각 설정 파일들은 @Configuration 어노테이션이 태깅되어 있음)
     * @Configuration
     * @ConditionalOnXxxYyyZzz
       * 실제로 빈 등록시 이 어노테이션의 설정 값에 따라 등록여부가 달라짐
+
+#### 자동 설정 생성
+* Xxx-Spring-Boot-Autoconfigure
+  * 자동 설정
+* Xxx-Spring-Boot-Starter 모듈
+  * 필요한 의존성 정의
+  * 하나로 만들 때 사용
+
+* 설정 방법
+  * 의존성 추가 (기존 스프링 관련 의존성 제거)
+    * spring-boot-autoconfigure
+      ```
+      implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.3.1.RELEASE'
+      ```
+    * spring-boot-autoconfigure-processor
+      ```
+      optional group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor', version: '2.3.1.RELEASE'
+      ```
+      * 아래 설정 추가
+        ```
+        configurations {
+            optional
+            compile.extendsFrom optional
+        }
+        ```
+    * spring-boot-dependencies
+      ```
+      compileOnly group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: '2.3.1.RELEASE', ext: 'pom'
+      ```
+  * @Configuration 파일 작성
+  * src/main/resource/META-INF 경로에 spring.factories 파일 작성
+    * 스프링 파일
+    * 서비스 프로파이더 패턴과 유사함
+  * spring.factories 안에 자동 설정 파일 추가
+  * 로컬 저장소에 배포
+    * Build.Gradle 설정
+      * Maven publish 플러그인 추가
+        * ``` id 'maven-publish' ```
+        * 퍼블리싱 설정
+          ```
+          publishing {
+              publications {
+                  // 해당 정보를 입력하여 타 프로젝트에서 해당 라이브러리를 참조
+                  maven(MavenPublication) {
+                      groupId = 'com.jaenyeong.springboot_started.auto_configure' // groupId 추가
+                      artifactId = 'noah-artifact'  // artifactId 추가
+                      version = '1.0.0' // 버전 정보 추가
+                      from components.java
+                  }
+              }
+          }
+          ``` 
+      * 빌드 스크립트 추가
+        * ```
+          buildscript {
+              repositories {
+                  mavenLocal()
+                  mavenCentral()
+              }
+          }
+          ```
+      * 레퍼지토리 설정
+        * ```
+          repositories {
+              maven {
+                  url '/Users/kimjaenyeong/.m2/repository'
+              }
+              mavenLocal()
+              jcenter()
+          }
+          ```
+      * 자바독, 소스파일 추가 생성 (안해도 상관 없음)
+        * ```
+          java {
+              withJavadocJar()
+              withSourcesJar()
+          }
+          ```
+    * 명령어 실행 (mvn install)
+      * ``` gradle publishToMavenLocal ```
+      * ``` ./gradlew build publishToMavenLocal ```
+    * IDEA > publishing > publishToMavenLocal, publishMavenPublicationToMavenLocal
+  * 의존성 추가
+    * implementation group: 'com.jaenyeong.springboot_started.auto_configure', name: 'noah-artifact', version: '1.0.0'
+
+* 빈 덮어써지는 것을 방지
+  * 스프링 2.1 버전 이후부터 사고 방지를 위하여 기본적으로 빈 오버라이딩 비활성화가 설정되어 있음
+    * application.properties(yaml) 파일에 설정 추가
+      * spring.main.allow-bean-definition-overriding = true
+  * 해당 빈에 @ConditionalOnMissingBean 어노테이션 태깅
+* 빈 재정의
+  * @ConfigurationProperties(“holoman”)
+  * @EnableConfigurationProperties(HolomanProperties)
+  * 프로퍼티 키값 자동 완성
+  * Holoman properties 설정 파일에 어노테이션 사용을 위하여 의존성 추가
+    * ``` annotationProcessor "org.springframework.boot:spring-boot-configuration-processor" ```
