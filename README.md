@@ -186,3 +186,31 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 * 9버전 이상 톰캣 사용시 주의
   * 최신 임베디드 톰캣버전은 서버에 자동으로 커넥터를 연결해주지 않기 때문에 아래와 같이 커넥터를 직접 연결
     * ``` tomcat.getConnector(); ```
+
+#### 서블릿 컨테이너, 포트
+* 다른 서블릿 컨테이너로 변경
+  * spring-boot-starter-web에서 톰캣 의존성 제거
+    * ```
+      implementation('org.springframework.boot:spring-boot-starter-web') {
+          exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+      }
+      ```
+
+* 웹서버 사용하지 않기
+  * application.properties(yaml) 파일에서 웹앱 타입 설정
+    * spring.main.web-application-type = none
+      * ``` application.setWebApplicationType(WebApplicationType.NONE); ``` 와 동일
+    * 위와 같이 설정시 서블릿 컨테이너가 의존성(클래스패스 등)이 있더라도 None WebApp으로 실행되어 바로 종료됨
+
+* 서버 포트 설정
+  * 포트 변경
+    * application.properties(yaml) 파일에서 포트 설정
+      * server.port = 8888
+  * 무작위 포트번호 사용
+    * server.port = 0
+  * ``` ApplicationListner<ServletWebServerInitializedEvent> ```
+
+* 네티를 이용해 만든 언더토어(Undertow)
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: '2.3.1.RELEASE'
+    ```

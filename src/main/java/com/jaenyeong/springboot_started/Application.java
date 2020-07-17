@@ -1,21 +1,13 @@
 package com.jaenyeong.springboot_started;
 
-import com.jaenyeong.springboot_started.auto_configure.Holoman;
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.startup.Tomcat;
-import org.springframework.context.annotation.Bean;
+//import com.jaenyeong.springboot_started.auto_configure.Holoman;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // @Configuration + @ComponentScan + @EnableAutoConfiguration 과 같음
 // JPA 의존성으로 인해 실행 에러 (database setting 문제)
-//@SpringBootApplication
+@SpringBootApplication
 
 //@Configuration
 //@ComponentScan
@@ -23,11 +15,11 @@ import java.io.PrintWriter;
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
 
-	public static void main(String[] args) throws LifecycleException {
+	public static void main(String[] args) {
 		// @SpringBootApplication 주석처리
 		// @Configuration, @ComponentScan 어노테이션 태깅시 실행하면 아래와 같은 에러 발생
 		// Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
-//		SpringApplication.run(Application.class, args);
+		SpringApplication.run(Application.class, args);
 
 		// 따라서 WebApplicationType 타입이 아닌 타입으로 실행
 //		SpringApplication application = new SpringApplication(Application.class);
@@ -48,32 +40,33 @@ public class Application {
 //		return holoman;
 //	}
 
-	private static void tomcat() throws LifecycleException {
-		Tomcat tomcat = new Tomcat();
-		tomcat.setPort(8888);
-		// 최신 임베디드 톰캣버전은 서버에 자동으로 커넥터를 연결해주지 않는 것으로 보임
-		tomcat.getConnector();
-
-//		tomcat.addContext("/", new File());
-		Context context = tomcat.addContext("/", "/");
-
-		HttpServlet servlet = new HttpServlet() {
-			@Override
-			protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//				super.doGet(req, resp);
-				PrintWriter printWriter = resp.getWriter();
-				printWriter.println("<html><head><title>");
-				printWriter.println("Hey, Tomcat");
-				printWriter.println("</title></head>");
-				printWriter.println("<body><h1>Hello Tomcat</h1></body>");
-				printWriter.println("</html>");
-			}
-		};
-
-		tomcat.addServlet("/", SERVLET_NAME, servlet);
-		context.addServletMappingDecoded("/hello", SERVLET_NAME);
-
-		tomcat.start();
-		tomcat.getServer().await();
-	}
+	// 톰캣 의존성 삭제시 에러
+//	private static void tomcat() throws LifecycleException {
+//		Tomcat tomcat = new Tomcat();
+//		tomcat.setPort(8888);
+//		// 최신 임베디드 톰캣버전은 서버에 자동으로 커넥터를 연결해주지 않는 것으로 보임
+//		tomcat.getConnector();
+//
+////		tomcat.addContext("/", new File());
+//		Context context = tomcat.addContext("/", "/");
+//
+//		HttpServlet servlet = new HttpServlet() {
+//			@Override
+//			protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+////				super.doGet(req, resp);
+//				PrintWriter printWriter = resp.getWriter();
+//				printWriter.println("<html><head><title>");
+//				printWriter.println("Hey, Tomcat");
+//				printWriter.println("</title></head>");
+//				printWriter.println("<body><h1>Hello Tomcat</h1></body>");
+//				printWriter.println("</html>");
+//			}
+//		};
+//
+//		tomcat.addServlet("/", SERVLET_NAME, servlet);
+//		context.addServletMappingDecoded("/hello", SERVLET_NAME);
+//
+//		tomcat.start();
+//		tomcat.getServer().await();
+//	}
 }

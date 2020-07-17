@@ -5,3 +5,10 @@ holoman:
 spring:
   main:
     allow-bean-definition-overriding: true
+    # 아래와 같이 웹앱 타입을 NONE으로 설정할 경우 서블릿 컨테이너가 있더라도 None WebApp으로 실행되어 바로 종료됨
+#    web-application-type: none
+
+server:
+  port: 8888
+  # 무작위 포트 설정
+#  port: 0
