@@ -18,6 +18,13 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+
+    // 스프링에서 버전을 관리하지 않기 때문에 버전을 직접 명시해줘야 함
+//    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+    // 스프링부트가 버전을 관리해주지만 직접 명시하는 경우
+//    implementation group: 'org.springframework', name: 'spring-core', version: '5.2.6.RELEASE'
 }
 
 test {
