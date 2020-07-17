@@ -158,3 +158,31 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * 프로퍼티 키값 자동 완성
   * Holoman properties 설정 파일에 어노테이션 사용을 위하여 의존성 추가
     * ``` annotationProcessor "org.springframework.boot:spring-boot-configuration-processor" ```
+
+#### 내장 웹 서버
+* 스프링 부트는 서버가 아님
+  * 톰캣 객체 생성
+  * 포트 설정
+  * 톰캣에 컨텍스트 추가
+  * 서블릿 생성
+  * 톰캣에 서블릿 추가
+  * 컨텍스트에 서블릿 맵핑
+  * 톰캣 실행 및 대기
+
+* spring-boot-autoconfigure 라이브러리 안에 META-INF/spring.factories 설정 파일
+
+* 스프링 부트의 자동설정이 위 항목들을 설정, 실행
+  * ServletWebServerFactoryAutoConfiguration
+    * 내장 서블릿 웹 서버를 생성 및 설정
+      * TomcatServletWebServerFactory 사용해 톰캣 설정 및 생성
+    * TomcatServletWebServerFactoryCustomizer (서버 커스터마이징)
+  * DispatcherServletAutoConfiguration
+    * 디스패처 서블릿 생성, 등록
+    * 서블릿 컨테이너(톰캣, 제티 등)는 달라질 수 있지만 서블릿은 변하지 않기 때문에 분리되어 있음
+
+* 톰캣 프로세스 확인 명령어
+  * ``` ps ax | grep tomcat ```
+
+* 9버전 이상 톰캣 사용시 주의
+  * 최신 임베디드 톰캣버전은 서버에 자동으로 커넥터를 연결해주지 않기 때문에 아래와 같이 커넥터를 직접 연결
+    * ``` tomcat.getConnector(); ```
