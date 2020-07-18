@@ -446,3 +446,41 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
          content-length: 12
          date: Sat, 18 Jul 2020 13:22:20 GMT
          ```
+
+#### 독립적으로 가능한 JAR
+* 배포하여 실행하기 위해 JAR 생성
+  * JAR 파일 하나로 실행 가능
+    * ``` java -jar springboot-started-1.0.0.jar ``` 명령어 실행 (java -jar 파일명)
+  * HTTPS 적용시 생성한 keystore.p12 파일 위치 확인
+    * 리소스 경로 안에 위치 시킨 후 application.properties(yaml) 설정 파일에서 경로 설정
+  * spring-maven-plugin이 해줌
+    * ``` mvn package ``` CLI 명령어로 JAR 생성
+  * 과거 “uber” jar 를 사용
+    * 모든 클래스 (의존성 및 애플리케이션)를 하나로 압축하는 방법
+    * 단점
+      * 의존성의 출처 등이 불분명, 파악하기 어려움
+      * 각각의 다른 파일이 동일한 파일명인 경우 사용하기 어려움
+  * Gradle (build/libs 경로안에 생성)
+    * IDEA에서 gradle clean, build 하면 jar 파일 생성
+    * ``` gradle clean build ``` 명령어 실행
+  * JAR 파일 압축 해제
+    * ``` unzip -q springboot-started-1.0.0.jar ``` 명령어 실행 (unzip -q 파일명)
+    * 추출 데이터
+      * BOOT-INF
+        * 직접 작성한 자바 소스의 클래스 파일
+        * 의존 라이브러리
+      * META-INF
+        * MANIFEST.MF
+      * org/springframework/boot/loader
+
+* 스프링 부트 전략
+  * 내장 JAR
+    * 기본적으로 자바에는 내장 JAR를 로딩하는 표준적인 방법이 없음
+  * 애플리케이션 클래스와 라이브러리 위치 구분
+  * org.springframework.boot.loader.jar.JarFile을 사용해 내장 JAR를 읽음
+  * org.springframework.boot.loader.Launcher를 사용해 실행
+
+* MANIFEST.MF
+  * 모든 JAR 파일의 시작점은 매니페스트의 메인 클래스
+  * JAR 파일의 META-INF 디렉토리 내에 위치
+  * JAR 패키징을 할 때 같이 만들어줌
