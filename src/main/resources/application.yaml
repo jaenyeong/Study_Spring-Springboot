@@ -9,6 +9,15 @@ spring:
 #    web-application-type: none
 
 server:
-  port: 8888
   # 무작위 포트 설정
-#  port: 0
+  #  port: 0
+  port: 8443
+  # [HTTPS - SSL 설정] 위 포트는 HTTPS
+  ssl:
+    # 다른 경로에 있는 경우 클래스패스로 위치 설정
+    key-store: classpath:keystore.p12
+    key-store-password: 123456
+    keyStoreType: PKCS12
+    keyAlias: spring
+  http2:
+    enabled: true

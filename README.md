@@ -214,3 +214,235 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * ```
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: '2.3.1.RELEASE'
     ```
+
+#### HTTPS & HTTP2
+* 대칭키 방식
+  * 암호화와 복호화를 하나의 키로 처리
+  * 키 노출시 위험 (대칭키 전송 방법이 어려움)
+* 비대칭키 방식 (공개키 개인키)
+  * 쌍을 이루는 키를 생성하여 암호화를 한 키로는 복호화할 수 없음
+  * 일반적으로 공개키를 전송하여 공개키로 암호화된 데이터를 수신하여 개인키로 복호화
+  * 반대로 개인키로 암호화하여 공개키와 암호화된 데이터를 전송하는 경우
+    * 데이터 전송자의 신원보증을 의미 (두 키가 쌍을 이루기 때문에)
+
+* CA (Certificate Authority) 인증 기관
+  * 해당 회사(서비스 등)을 확인하여 인증(보증)해주는 기관
+  * 암호학에서 인증 기관은 다른 곳에서 사용하기 위한 디지털 인증서를 발급하는 하나의 단위
+  * 브라우저들은 CA 목록을 미리 알고 있음
+
+* SSL 인증서
+  * 기능(목적)
+    * 클라이언트가 접속한 서버가 신뢰할 수 있는 서버인지 보장 (신원보증)
+    * SSL 통신에 사용할 공개키를 클라이언트에게 제공
+  * 포함된 정보
+    * 서비스의 정보(인증서를 발급한 CA, 서비스의 도메인 등과 같은 정보)
+    * 서버사이드 공개키 (공개키의 내용과 암호화 방법)
+  * 인증서 발급
+    * CA로부터 구입
+      * 기업 정보(서비스 도메인 등)에 대한 서류 등을 제출하며 사용할 공개키를 같이 전달
+    * CA는 자신의 개인키(비공개키)를 사용해 발급할 인증서를 암호화하여 제공
+  * 서비스를 보증하는 방법
+    1) 웹 브라우저(클라이언트)가 해당 서버 서비스에 접속할 때 서버는 자신의 인증서를 제공
+       * 이때 인증서는 CA가 개인키(비공개키)로 암호화
+    2) 웹 브라우저는 인증서의 CA 정보가 자신이 가진 CA 목록에 있는지 확인
+    3) 인증서의 CA가 목록에 있는 경우 CA의 공개키를 사용하여 서버의 인증서를 복호화
+       * 복호화할 수 있다는 것은 서버의 인증서가 CA의 개인키로 암호화되어 발급됐다는 것을 의미 (서버의 서비스를 신뢰할 수 있음)
+
+* SSL & TLS 동작 방법
+  * 클라이언트와 서버는 서로 자신의 공개키를 전송하여 데이터 전송시 상대에 공개키를 통해 암호화하여 전송
+    * 이 방식은 암, 복호화 과정에서 많은 리소스를 잡아 먹기 때문에(성능 이슈) 사용하고 있지 않음
+  * 암호화된 데이터를 전송하기 위해 공개키 타입과 대칭키 타입을 혼합해 사용
+    * 실제 데이터는 대칭키를 통해 암호화
+    * 위에서 사용된 대칭키를 상대에 공개키로 암호화
+  * 컴퓨터(호스트) 간 네트워크 통신시 내부 절차
+    1) 핸드셰이크
+       * 데이터 전송 전 상대에 대한 정보 획득
+       * 인증서(공개키) 송수신
+       * 절차
+         1) Client Hello 단계 (클라이언트가 서버에 접속)
+            * 이 단계에서 주고 받는 정보
+              * 클라이언트에서 생성한 랜덤 데이터
+                * 서버의 랜덤 데이터와 조합하여 pre master secret 키를 생성하는데 사용
+              * 클라이언트가 지원하는 암호화 방식
+                * 사용 가능한 암호화 방식이 다를 수 있기 때문
+              * 세션 아이디
+                * 기존에 핸드셰이킹을 했다면 해당 세션 아이디를 재사용할 수 있게됨 (핸드셰이킹 비용, 시간 절감)
+                * 이 때 사용되는 세션 아이디 (식별자)를 서버로 전송
+         2) Server Hello 단계 (클라이언트 Client Hello에 대한 응답)
+            * 이 단계에서 주고 받는 정보
+              * 서버에서 생성한 랜덤 데이터
+                * 클라이언트의 랜덤 데이터와 조합하여 pre master secret 키를 생성하는데 사용
+              * 클라이언트가 보낸 암호화 방식 중에서 선택한 암호화 방식
+              * 인증서
+         3) 클라이언트가 서버의 인증서 확인
+            * 클라이언트는 받은 인증서의 CA가 자신이 알고 있는 CA 목록에 있는지 확인
+              * 목록에 없다면 경고 메세지 출력
+            * 클라이언트는 내장된 CA 공개키를 통해 서버의 인증서를 복호화
+            * 클라이언트가 만든 랜덤 데이터와 서버가 보낸 랜덤 데이터를 조합하여 pre master secret(대칭키) 이라는 키를 생성
+              * pre master secret은 노출되면 안됨
+            * 서버에서 제공한 인증서의 공개키를 이용하여 pre master secret를 암호화 후 서버에게 전송
+         4) 서버는 클라이언트가 보낸 pre master secret을 자신의 개인키(비공개키)로 복호화
+            * 서버와 클라이언트는 모든 일련의 과정을 통해 pre master secret 값으로 master secret 값을 생성
+            * master secret은 세션키를 생성
+            * 서버와 클라이언트는 이 세션키를 이용해 데이터를 대칭키 방식으로 암호화하여 통신
+         5) 핸드셰이킹 종료
+    2) 세션
+       * 실제로 서버와 클라이언트가 데이터를 송수신하는 단계
+       * 세션키를 통해 대칭키 방식으로 주고 받을 데이터를 암호화
+    3) 세션 종료
+       * 데이터 전송이 끝나면 SSL 통신 종료를 서로에게 알림
+       * 통신에 사용한 세션키(대칭키)를 폐기
+
+* HTTP (HyperText Transfer Protocol)
+  * www(웹)에서 정보를 주고 받는 프로토콜
+  * 일반적으로 HTML(hypertext)을 송수신하는데 사용
+  * TCP, UDP를 사용
+* HTTPS 
+  * HTTP + Over Secure Socket Layer
+* HTTP2
+  * HTTP의 2번째 버전 (HTTP 1.1의 차기 버전)
+  * 개선
+    * Head of line blocking(HOL)
+      * 여러 파일을 한꺼번에 병렬로 전송하여 로딩 시간 줄임
+      * HTTP 1.1전까지는 한 번에 한 파일만 전송 가능
+    * 중복헤더 제거
+      * 같은 내용의 헤더를 보낼경우 생략처리하여 속도 개선
+    * 헤더 압축 (Header compression)
+      * 평문이었던 HTTP 헤더와 달리 일종의 컴파일을 거쳐 용량 대비 처리 효율성 개선
+      * 컴파일을 거치기 때문에 헤더 크기 자체도 줄어듦
+    * 서버 푸시 (Server push)
+      * 특정 파일을 서버에 지정, HTTP 전송시 같이 밀어 넣는 방식 (JS, CSS, 이미지 등)
+    * 우선순위 (Prioritization)
+      * 웹 페이지를 구성하는 파일 요소의 우선순위 부여
+  * SPDY 기반
+    * 구글이 개발한 비표준 개방형 네트워크 프로토콜
+    * 압축, 다중화, 우선순위 설정을 통한 레이턴시 감소를 달성
+    * 웹 페이지 부하 레이턴시를 줄이고 웹 보안을 개선하는 점에서 HTTP와 비슷
+
+* HTTPS 설정
+  * keytool
+    * Manages a keystore (database) of cryptographic keys, X.509 certificate chains, and trusted certificates
+    * 공개키/개인키 쌍을 생성하여 keystore(일종의 데이터베이스)에 저장하는 자바 CLI 툴 (Java SDK와 같이 배포됨)
+    * 공개키/개인키 쌍과 인증서, keystore를 관리하는 보안 관련 유틸리티 프로그램
+  * keystore
+    * 암호화된 키, 인증서를 저장하는 스토리지
+    * 키 엔트리 (key entry)
+      * 비밀키와 공개키와 관련된 인증서 체인으로 구성
+    * 공인인증서 엔트리 (trusted certificate entry)
+      * 신뢰할 수 있는 기관을 나타내는 공개키 인증서
+  * keytool 명령어 실행
+    * ```
+      keytool -genkey -alias spring -storetype PKCS12 -keyalg RSA \
+      -keysize 2048 -keystore keystore.p12 -validity 4000
+      ```
+      * -genkey
+        * 공개키 개인키 쌍 생성
+        * 지정한 키스토어가 없는 파일이라면 파일을 새로 생성
+      * -alias
+        * keystore 별칭
+      * -storetype
+        * keystore가 저장되는 파일 형식 (기본값은 JKS)
+      * -keyalg
+        * 키를 생성하는데 사용되는 알고리즘
+      * -keysize
+        * 생성할 키의 비트단위 크기
+      * -keystore
+        * 생성된 키쌍을 저장할 keystore 파일 (없는 경우 새로 생성됨)
+      * -validity
+        * 유효기간
+    * 저장소 비밀번호 및 기타 정보 설정
+      * 비밀번호 : 123456
+      * 기타 단체 및 지역, 국가코드 : None, Seoul, ko
+  * application.properties(yaml) 설정
+    * server.ssl.key-store: keystore.p12
+    * server.ssl.key-store-password: 123456
+    * server.ssl.keyStoreType: PKCS12
+    * server.ssl.keyAlias: spring
+  * 설정시 톰캣 사용
+    * 언더토우 사용하면 실행되지 않음 (다른 설정이 더 필요한듯 보임)
+  * 현재 브라우저가 모르는 인증서(CA를 모름)이기 때문에 접속시 경고 출력
+  * 터미널 명령 실행
+    * ``` curl -I --http2 http://localhost:8080/hello ```
+      * 400 반환
+        * ```
+          HTTP/1.1 400
+          Content-Type: text/plain;charset=UTF-8
+          Connection: close
+          ```
+    * ``` curl -I -k --http2 https://localhost:8080/hello ```
+      * -k 옵션 추가전 인증서 문제 경고 반환
+        * ```
+          curl: (60) SSL certificate problem: self signed certificate
+          More details here: https://curl.haxx.se/docs/sslcerts.html
+          
+          curl failed to verify the legitimacy of the server and therefore could not
+          establish a secure connection to it. To learn more about this situation and
+          how to fix it, please visit the web page mentioned above.
+          ```
+      * -k 옵션 추가 후 200 반환
+        * ```
+          HTTP/1.1 200
+          Content-Type: text/plain;charset=UTF-8
+          Content-Length: 12
+          Date: Sat, 18 Jul 2020 12:48:32 GMT
+          ```
+    * HTTP/2 요청임에도 불구하고 HTTP/1.1 반환
+
+* HTTP 커넥터
+  * HTTPS를 적용하고 나면 더이상 HTTP를 사용하지 못함
+    * HTTP 커넥터는 1개이기 때문
+  * 코딩 설정
+    * 스프링 부트는 application.properties(yaml) 파일을 통한 HTTP(S) 커넥터 설정을 지원하지 않기 때문에 코딩으로 설정해야 함
+    * ```
+      @Bean
+      public ServletWebServerFactory servletContainer() {
+          TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+          tomcat.addAdditionalTomcatConnectors(createStandardConnector());
+          return tomcat;
+      }
+     
+      private Connector createStandardConnector() {
+          Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+          // 커넥터가 사용할 포트 설정
+          connector.setPort(8080);
+          return connector;
+      }
+      ```
+    * http
+      * ``` curl -I --http2 http://localhost:8080/hello ```
+      * 200 반환
+        * ```
+          HTTP/1.1 200
+          Content-Type: text/plain;charset=UTF-8
+          Content-Length: 12
+          Date: Sat, 18 Jul 2020 13:07:52 GMT
+          ```
+    * https
+      * ``` curl -I -k --http2 https://localhost:8443/hello ```
+      * 200 반환
+        * ```
+          HTTP/1.1 200
+          Content-Type: text/plain;charset=UTF-8
+          Content-Length: 12
+          Date: Sat, 18 Jul 2020 13:07:52 GMT
+          ```
+
+* HTTP2 설정
+  * HTTP2는 HTTPS가 적용되어 있어야 함
+  * application.properties(yaml) 파일 설정
+    * server.http2.enable = true
+  * 사용하는 서블릿 컨테이너마다 제약사항(조건) 다름
+    * undertow
+      * server.http2.enabled = true (HTTPS만 적용되어 있으면 아무런 추가 설정 필요 없음)
+    * tomcat
+      * 8버전은 설정이 복잡하여 생략
+        * libtcnative 라이브러리 필요
+      * 9버전(Tomcat 9.0x + JDK 9)
+        * server.http2.enabled = true (HTTPS만 적용되어 있으면 아무런 추가 설정 필요 없음)
+      * HTTP2로 200 반환
+       * ```
+         HTTP/2 200
+         content-type: text/plain;charset=UTF-8
+         content-length: 12
+         date: Sat, 18 Jul 2020 13:22:20 GMT
+         ```

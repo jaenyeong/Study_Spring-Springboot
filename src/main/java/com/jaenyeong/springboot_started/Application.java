@@ -2,8 +2,16 @@ package com.jaenyeong.springboot_started;
 
 //import com.jaenyeong.springboot_started.auto_configure.Holoman;
 
+//import org.apache.catalina.connector.Connector;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+//import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+//import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+//import org.springframework.context.annotation.Bean;
 
 // @Configuration + @ComponentScan + @EnableAutoConfiguration 과 같음
 // JPA 의존성으로 인해 실행 에러 (database setting 문제)
@@ -12,8 +20,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //@Configuration
 //@ComponentScan
 //@EnableAutoConfiguration
+
+@RestController
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
+
+	@GetMapping("/hello")
+	public String hello() {
+		return "Hello Spring";
+	}
 
 	public static void main(String[] args) {
 		// @SpringBootApplication 주석처리
@@ -68,5 +83,20 @@ public class Application {
 //
 //		tomcat.start();
 //		tomcat.getServer().await();
+//	}
+
+	// 톰캣 사용시 HTTP 사용할 포트 설정
+//	@Bean
+//	public ServletWebServerFactory servletContainer() {
+//		TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+//		tomcat.addAdditionalTomcatConnectors(createStandardConnector());
+//		return tomcat;
+//	}
+//
+//	private Connector createStandardConnector() {
+//		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//		// 커넥터가 사용할 포트 설정
+//		connector.setPort(8080);
+//		return connector;
 //	}
 }
