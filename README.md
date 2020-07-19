@@ -484,3 +484,116 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * 모든 JAR 파일의 시작점은 매니페스트의 메인 클래스
   * JAR 파일의 META-INF 디렉토리 내에 위치
   * JAR 패키징을 할 때 같이 만들어줌
+
+### 스프링 부트 활용
+* 핵심 기능
+  * SpringApplication
+  * 외부 설정
+  * 프로파일
+  * 로깅
+  * 테스트
+  * Spring-Dev-Tools
+
+* 각종 기술 연동
+  * 스프링 웹 MVC
+  * 스프링 데이터
+  * 스프링 시큐리티
+  * REST API 클라이언트
+  * 그 외 기타
+
+#### SpringApplication
+* main() 메서드에서 시작된 Spring application을 부트스트랩하는 편리한 기능 제공
+  * 부트스트랩은 한 번 시작하면 알아서 진행되는 일련의 과정
+* ``` static SpringApplication.run ``` 메서드에게 위임
+* 정적 메서드에게 위임하지 않고 커스터마이징 할 경우 객체 생성하여 사용
+  * ```
+    SpringApplication application = new SpringApplication(Application.class);
+    application.run(args);
+    ```
+* SpringApplicationBuilder로 빌더 패턴 사용 가능
+  * ```
+    new SpringApplicationBuilder()
+            .sources(Application.class)
+            .run(args);
+    ```
+
+* 디버그 모드 실행 (택일)
+  * VM options 설정
+    * -Ddebug
+  * Program arguments 설정
+    * --debug
+
+* FailureAnalyzers
+  * 에러 출력시 깔끔하게 해주는 기능
+
+* 배너
+  * banner.txt 파일 생성 (gif, jpg, png 등 확장자 사용가능)
+    * resources 밑에 위치
+      * 다른 곳에 위치할 경우 application.properties(yaml) 파일에서 설정
+        * spring.banner.location = classpath:banner.txt
+    * 배너 파일에서 ${spring-boot.version} 등의 변수를 사용할 수 있음
+      * 매니페스트 파일이 존재 해야만 사용 가능한 변수도 있음
+        * ${application.version}
+        * ${application.formatted-version}
+        * 기타
+  * 배너 소스 구현
+    * Banner 클래스 구현하고 SpringApplication.setBanner()로 설정 가능
+    * ```
+      SpringApplication application = new SpringApplication(Application.class);
+    
+      // 배너 커스터마이징
+      application.setBanner((environment, sourceClass, out) -> {
+          out.println("-------------------");
+          out.println("Jaenyeong");
+          out.println("-------------------");
+      });
+      application.run(args);
+      ```
+  * 배너 끄는 방법
+    * ```
+      SpringApplication application = new SpringApplication(Application.class);
+      // 배너 Off
+      application.setBannerMode(Banner.Mode.OFF);
+      application.run(args);
+      ```
+  * 배너 파일과 소스로 배너 삽입시 [배너 파일]이 출력됨
+
+* ApplicationEvent 등록
+  * 스프링 부트에서 제공하는 수 많은 이벤트가 존재
+    * 앱이 실행될 때 또는 구동이 완료 되었을 때, 실패 했을 때
+    * applicationContext가 생성되거나 갱신 되었을 때
+  * ApplicationContext를 만들기 전에 사용하는 리스너는 @Bean(@Component)으로 등록할 수 없음
+    * applicationContext가 생성된 후 발생하는 이벤트에 대한 리스너는 실행됨
+    * applicationContext가 생성되기 이전에 발생된 이벤트의 리스너는 빈으로 등록해도 실행되지 않음
+  * ``` SpringApplication.addListeners(); ```
+
+* WebApplicationType 설정 (None, Servlet, Reactive)
+  * 타입 종류
+    * ``` WebApplicationType.NONE ```
+    * ``` WebApplicationType.SERVLET ```
+    * ``` WebApplicationType.REACTIVE ```
+  * Servlet, Reactive 중 존재하고 있는것이 기본값이며 아무것도 없는 경우 None
+  * Servlet, Reactive 두가지 다 존재하는 경우 Servlet이 기본값
+  * 따라서 원하는 타입으로 지정할 때 아래와 같이 설정
+    * ```
+      SpringApplication application = new SpringApplication(Application.class);
+  	  application.setWebApplicationType(WebApplicationType.REACTIVE);
+      application.run(args);
+      ```
+
+* Application Argument 사용
+  * ``` --debug ```와 같이 --로 시작하는 것
+    * -D로 시작하는 것은 VM options
+  * ApplicationArguments를 빈으로 등록해 주니까 가져다 쓰면 됨
+    * VM options 무시
+    * 예제 (IDEA 실행 설정)
+      * VM options : ``` -Dfoo ```
+      * Program Arguments : ``` --bar ```
+    * 예제 (Jar CLI 실행)
+      * ``` java -jar springboot-started-1.0.0.jar -Dfoo --bar ```
+
+* Runner
+  * 앱 실행한 뒤 뭔가 실행하고 싶을 때
+    * ApplicationRunner 구현한 runner 작성 (추천)
+    * CommandLineRunner 구현한 runner 작성 
+  * @Order 어노테이션으로 순서 지정 가능

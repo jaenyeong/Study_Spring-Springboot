@@ -4,10 +4,18 @@ package com.jaenyeong.springboot_started;
 
 //import org.apache.catalina.connector.Connector;
 
+//import org.springframework.boot.Banner;
+
+import com.jaenyeong.springboot_started.listener.SampleListener;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+//import org.springframework.boot.builder.SpringApplicationBuilder;
+
+//import static org.springframework.boot.Banner.Mode.*;
 
 //import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 //import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
@@ -43,16 +51,71 @@ public class Application {
 
 		// 톰캣
 //		tomcat();
+
+		// SpringApplication.run(Application.class, args) 메서드를 사용하는 것보다 커스터마이징 할 수 있음
+//		SpringApplication application = new SpringApplication(Application.class);
+//
+//		// 배너 설정
+////		bannerSet(application);
+//		application.run(args);
+
+		// SpringApplicationBuilder 사용
+//		new SpringApplicationBuilder()
+//				.sources(Application.class)
+//				.run(args);
+
+		// ApplicationContext 생성되기 전에 실행되는 이벤트의 리스너 설정
+//		setEventListenerBeforeApplicationContext();
+
+		// App 타입 설정 None, Servlet, Reactive
+		// Servlet, Reactive 중 존재하고 있는것이 기본값이며 아무것도 없는 경우 None
+		// Servlet, Reactive 두가지 다 존재하는 경우 Servlet이 기본값
+		// 따라서 원하는 타입으로 지정할 때 아래와 같이 설정
+//		setWebApplicationType(args);
 	}
 
-	// Runner에 빈 설정과 충돌
-	// 스프링 2.1 버전 이후부터 사고 방지를 위하여 기본적으로 빈 오버라이딩 비활성화가 설정되어 있음
+	// 앱 타입 설정
+	private static void setWebApplicationType(String[] args) {
+		SpringApplication application = new SpringApplication(Application.class);
+//		application.setWebApplicationType(WebApplicationType.SERVLET);
+		application.setWebApplicationType(WebApplicationType.NONE);
+//		application.setWebApplicationType(WebApplicationType.REACTIVE);
+		application.run(args);
+	}
+
+	// ApplicationContext 생성되기 전에 실행되는 이벤트의 리스너 설정
+//	private static void setEventListenerBeforeApplicationContext() {
+//		SpringApplication application = new SpringApplication(Application.class);
+//		application.addListeners(new SampleListener());
+//		application.run(args);
+//	}
+
+	// 배너 설정
+//	private static void bannerSet(SpringApplication application) {
+//		// 배너 커스터마이징
+//		application.setBanner((environment, sourceClass, out) -> {
+//			out.println("-------------------");
+//			out.println("Jaenyeong");
+//			out.println("-------------------");
+//		});
+//
+//		// 배너 Off
+//		application.setBannerMode(Banner.Mode.OFF);
+//	}
+
+	// 톰캣 사용시 HTTP 사용할 포트 설정
 //	@Bean
-//	public Holoman holoman() {
-//		Holoman holoman = new Holoman();
-//		holoman.setName("Noah");
-//		holoman.setHowLong(60);
-//		return holoman;
+//	public ServletWebServerFactory servletContainer() {
+//		TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+//		tomcat.addAdditionalTomcatConnectors(createStandardConnector());
+//		return tomcat;
+//	}
+//
+//	private Connector createStandardConnector() {
+//		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//		// 커넥터가 사용할 포트 설정
+//		connector.setPort(8080);
+//		return connector;
 //	}
 
 	// 톰캣 의존성 삭제시 에러
@@ -85,18 +148,13 @@ public class Application {
 //		tomcat.getServer().await();
 //	}
 
-	// 톰캣 사용시 HTTP 사용할 포트 설정
+	// Runner에 빈 설정과 충돌
+	// 스프링 2.1 버전 이후부터 사고 방지를 위하여 기본적으로 빈 오버라이딩 비활성화가 설정되어 있음
 //	@Bean
-//	public ServletWebServerFactory servletContainer() {
-//		TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-//		tomcat.addAdditionalTomcatConnectors(createStandardConnector());
-//		return tomcat;
-//	}
-//
-//	private Connector createStandardConnector() {
-//		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//		// 커넥터가 사용할 포트 설정
-//		connector.setPort(8080);
-//		return connector;
+//	public Holoman holoman() {
+//		Holoman holoman = new Holoman();
+//		holoman.setName("Noah");
+//		holoman.setHowLong(60);
+//		return holoman;
 //	}
 }

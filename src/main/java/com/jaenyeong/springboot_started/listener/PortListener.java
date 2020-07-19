@@ -1,4 +1,4 @@
-package com.jaenyeong.springboot_started;
+package com.jaenyeong.springboot_started.listener;
 
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;

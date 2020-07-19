@@ -1,4 +1,4 @@
-package com.jaenyeong.springboot_started;
+package com.jaenyeong.springboot_started.runner;
 
 import com.jaenyeong.springboot_started.auto_configure.Holoman;
 import org.springframework.beans.factory.annotation.Autowired;
