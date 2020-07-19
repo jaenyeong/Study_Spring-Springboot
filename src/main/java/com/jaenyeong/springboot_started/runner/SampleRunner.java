@@ -35,19 +35,19 @@ public class SampleRunner implements ApplicationRunner {
 		System.out.println("SampleRunner bar : " + args.containsOption("bar"));
 
 		// application.properties 데이터 출력
-		System.out.println("----------------------------------------------------------");
-		System.out.println("SampleRunner application properties name : " + name);
-		System.out.println("SampleRunner application properties age : " + age);
-		System.out.println("SampleRunner application properties fullName : " + fullName);
-		System.out.println("----------------------------------------------------------");
+		System.out.println("[SampleRunner1]----------------------------------------------------------");
+		System.out.println("application properties name : " + name);
+		System.out.println("application properties age : " + age);
+		System.out.println("application properties fullName : " + fullName);
+		System.out.println("[SampleRunner1]----------------------------------------------------------");
 
-		System.out.println("----------------------------------------------------------");
+		System.out.println("[SampleRunner2]----------------------------------------------------------");
 		System.out.println("JaenyeongProperties name : " + jaenyeongProperties.getName());
 		System.out.println("JaenyeongProperties age : " + jaenyeongProperties.getAge());
 		System.out.println("JaenyeongProperties fullName : " + jaenyeongProperties.getFullName());
 		System.out.println("JaenyeongProperties sessionTimeout : " + jaenyeongProperties.getSessionTimeout());
 		System.out.println("JaenyeongProperties nullParam : " + jaenyeongProperties.getNullParam());
-		System.out.println("----------------------------------------------------------");
+		System.out.println("[SampleRunner2]----------------------------------------------------------");
 	}
 
 	// CommandLineRunner 구현시 메서드

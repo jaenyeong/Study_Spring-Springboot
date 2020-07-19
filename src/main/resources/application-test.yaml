@@ -1,2 +1,7 @@
 jaenyeong:
   name: Test Jaenyeong
+
+spring:
+  output:
+    ansi:
+      enabled: always

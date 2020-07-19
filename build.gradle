@@ -57,6 +57,9 @@ dependencies {
         // 톰캣 제거
         exclude module: "spring-boot-starter-tomcat"
 //        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+
+        // loggig 제거
+        exclude module: "spring-boot-starter-logging"
     }
     // 톰캣을 제거 하고 제티(jetty)
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '2.3.1.RELEASE'
@@ -90,6 +93,9 @@ dependencies {
 
     // 프로퍼티 validator 용도
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator'
+
+    // log4j2으로 변경
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.3.1.RELEASE'
 }
 
 test {

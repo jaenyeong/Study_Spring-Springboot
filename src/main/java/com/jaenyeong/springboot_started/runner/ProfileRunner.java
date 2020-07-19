@@ -16,10 +16,10 @@ public class ProfileRunner implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		System.out.println("----------------------------------------------------------");
+		System.out.println("[ProfileRunner]----------------------------------------------------------");
 		System.out.println("hello : " + hello);
 		System.out.println("jaenyeongProperties Name : " + jaenyeongProperties.getName());
 		System.out.println("jaenyeongProperties proddb : " + jaenyeongProperties.getProddb());
-		System.out.println("----------------------------------------------------------");
+		System.out.println("[ProfileRunner]----------------------------------------------------------");
 	}
 }

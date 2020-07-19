@@ -724,3 +724,100 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * application-{profile}.properties
     * application-prod.properties, application-test.properties 파일 생성
   * 프로파일용 프로퍼티 파일이 기본 프로퍼티 파일보다 우선 순위가 높음
+
+#### 로깅
+* 스프링 부트 기본 로거 설정
+  * 로깅 퍼사드 VS 로거
+    * 로깅 퍼사드
+      * Commons Logging, SLF4j(Simple Logging Facade for Java)
+      * 실제 로거 구현체가 아닌 로깅 기능에 대해서 추상화한 인터페이스
+      * Commons Logging 문제가 많았음
+        * 런타임시 클래스 로딩과 관련된 이슈
+        * 메모리 릭 등
+        * 대체제로 SLF4j 등장
+        * 하지만 스프링 프레임워크 초창기부터 Commons Logging을 사용하였기 때문에 현재까지도 사용 중
+        * 이를 해결하기 위해 스프링에 Commons Logging 의존성을 제거하고 SLF4j를 사용하는 등 설정이 복잡했음
+        * 스프링 5부터는 이러한 설정을 하지 않아도 내부적으로 JCL이라는 모듈을 사용하여 SLF4j를 사용
+          * 궁극적으로 Logback을 사용하게 됨
+    * 실제 로거 구현체
+      * JUL (Java Utility Logging), Log4J2, Logback
+        * Logback은 SLF4j의 구현체
+        * JUL을 사용하는 부분은 SLF4j로 위임
+  * Spring-JCL (Jakarta)
+    * Commons Logging -> SLF4j or Log4J2
+    * pom.xml에 exclusion 안해도 됨 (의존성 제거를 직접 하지 않아도 된다는 것을 의미)
+  * 스프링 부트 로깅
+    * 기본 포맷
+    * --debug
+      * 일부 핵심 라이브러리만 디버깅 모드로
+    * --trace
+      * 전부 다 디버깅 모드로
+    * 컬러 출력 (application.properties(yaml) 파일 설정)
+      * spring.output.ansi.enabled=true
+    * 파일 출력 (application.properties(yaml) 파일 설정) (spring.log 파일)
+      * logging.file 설정
+        * 파일 지정
+      * logging.path (Deprecated)
+        * 디렉토리 설정
+        * logging.file.path으로 대체
+      * 둘다 지정시 logging.file 설정 사용
+    * 로그 레벨 조정 (application.properties(yaml) 파일 설정)
+      * logging.level.패키지 = 로그 레벨
+      
+* 로깅 파일
+  * 기본적으로 10MB마다 롤링
+    * Logging.file.max-size 속성으로 크기제한 변경 가능
+    * logging.file.max-history 속성 설정
+      * 설정하지 않으면 기본적으로 지난 7일까지 롤링 파일 유지
+      * max-history 설정값 이후 데이터 아카이빙
+
+* 백업
+  * 원본 데이터 손실을 대비하기 위해 데이터의 사본을 저장하는 것 또는 그 사본 데이터
+* 아카이브
+  * 참고용으로 사본 데이터를 생성하는 것 또는 그 사본 데이터
+
+* 커스터마이징
+  * 커스텀 로그 설정 파일 사용
+    * Logback
+      * logback.xml
+      * logback-spring.xml (사용 권장)
+        * 스프링 부트가 추가 기능 제공
+        * profile, environment variable 등 사용 가능
+        * logback.xml은 너무 일찍 로딩되기 때문에 위와 같은 기능들을 사용 못함
+        * ```
+          <?xml version="1.0" encoding="UTF-8"?>
+          <configuration>
+              <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+              <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+              <root level="INFO">
+                  <appender-ref ref="CONSOLE" />
+              </root>
+          <!--    <logger name="org.springframework.web" level="DEBUG"/>-->
+              <logger name="com.jaenyeong" level="DEBUG"/>
+          </configuration>
+          ```
+    * Log4J2
+      * log4j2-spring.xml
+      * log4j2.xml
+      * log42j-spring.yaml (properties)
+      * log42j.yaml (properties)
+    * JUL (권장하지 않음)
+      * logging.properties
+    * Logback extension
+      * 프로파일 ``` <springProfile name="프로파일"> ```
+      * Environment 프로퍼티 ``` <springProperty> ```
+
+* log4j2 설정
+  * 의존성 설정
+    * ```
+      implementation('org.springframework.boot:spring-boot-starter-web') {
+          // loggig 제거
+          exclude module: "spring-boot-starter-logging"
+      }
+      // log4j2으로 변경
+      implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.3.1.RELEASE'
+      ```
+  * log4j2-spring.yaml 파일 생성
+    * 로그파일 설정 내용 작성
+  * application.properties(yaml) 파일 설정
+    * logging.config = classpath:log4j2-spring.yaml

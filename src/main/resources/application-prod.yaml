@@ -4,3 +4,6 @@ jaenyeong:
 spring:
   profiles:
     include: proddb
+  output:
+    ansi:
+      enabled: always
