@@ -49,6 +49,9 @@ publishing {
 }
 
 dependencies {
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+
     // [자동 설정] - 메이븐 로컬 저장소로 스프링부트 커스터마이징 설정파일 아티팩트 추출시 스프링 의존성 주석처리
     implementation('org.springframework.boot:spring-boot-starter-web') {
         // 톰캣 제거
@@ -84,6 +87,9 @@ dependencies {
 
     // 로컬 저장소에 저장되어 있는 새로 생성한 자동 설정 파일 추가
     implementation group: 'com.jaenyeong.springboot_started.auto_configure', name: 'noah-artifact', version: '1.0.0'
+
+    // 프로퍼티 validator 용도
+    implementation group: 'org.hibernate.validator', name: 'hibernate-validator'
 }
 
 test {

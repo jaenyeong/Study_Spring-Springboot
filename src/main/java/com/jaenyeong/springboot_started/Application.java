@@ -6,10 +6,15 @@ package com.jaenyeong.springboot_started;
 
 //import org.springframework.boot.Banner;
 
-import com.jaenyeong.springboot_started.listener.SampleListener;
+import com.jaenyeong.springboot_started.properties.JaenyeongProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,8 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 //@Configuration
 //@ComponentScan
 //@EnableAutoConfiguration
-
 @RestController
+
+// 프로퍼티 설정 (빈 등록, @ConfigurationProperties 어노테이션 처리)
+// 아래 어노테이션은 자동으로 되어 있음
+//@EnableConfigurationProperties(JaenyeongProperties.class)
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
 
@@ -38,11 +46,18 @@ public class Application {
 		return "Hello Spring";
 	}
 
+	// 외부, 서드파티에 프로퍼티 설정이 있는 경우
+//	@ConfigurationProperties("server")
+//	@Bean
+//	public ServerProperties serverProperties() {
+//		return new ServerProperties();
+//	}
+
 	public static void main(String[] args) {
 		// @SpringBootApplication 주석처리
 		// @Configuration, @ComponentScan 어노테이션 태깅시 실행하면 아래와 같은 에러 발생
 		// Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
-		SpringApplication.run(Application.class, args);
+//		SpringApplication.run(Application.class, args);
 
 		// 따라서 WebApplicationType 타입이 아닌 타입으로 실행
 //		SpringApplication application = new SpringApplication(Application.class);
@@ -71,7 +86,7 @@ public class Application {
 		// Servlet, Reactive 중 존재하고 있는것이 기본값이며 아무것도 없는 경우 None
 		// Servlet, Reactive 두가지 다 존재하는 경우 Servlet이 기본값
 		// 따라서 원하는 타입으로 지정할 때 아래와 같이 설정
-//		setWebApplicationType(args);
+		setWebApplicationType(args);
 	}
 
 	// 앱 타입 설정

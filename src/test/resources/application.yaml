@@ -1,0 +1,29 @@
+holoman:
+  name: Hello holoman
+  how-long: 777
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    # 아래와 같이 웹앱 타입을 NONE으로 설정할 경우 서블릿 컨테이너가 있더라도 None WebApp으로 실행되어 바로 종료됨
+#    web-application-type: none
+
+server:
+  # 무작위 포트 설정
+  #  port: 0
+  port: 8443
+  # [HTTPS - SSL 설정] 위 포트는 HTTPS
+  ssl:
+    # 다른 경로에 있는 경우 클래스패스로 위치 설정
+    key-store: classpath:keystore.p12
+    key-store-password: 123456
+    keyStoreType: PKCS12
+    keyAlias: spring
+  http2:
+    enabled: true
+
+jaenyeong:
+  name: testJaenyeong
+  age: 77777
+  fullName: ${jaenyeong.name} testKim
+  sessionTimeout: 25s

@@ -597,3 +597,109 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     * ApplicationRunner 구현한 runner 작성 (추천)
     * CommandLineRunner 구현한 runner 작성 
   * @Order 어노테이션으로 순서 지정 가능
+
+#### 외부 설정
+* 사용 가능한 외부 설정
+  * application.properties(yaml)
+  * 환경 변수
+  * 커맨드 라인 아규먼트
+
+* 프로퍼티 우선 순위 확인 예제 설정
+  * 테스트 시 설정
+    * ``` import org.springframework.core.env.Environment; ``` 스프링 패키지 참조해야 함
+    * 참조
+      * src/main 아래에 있는 파일들이 클래스패스에 들어간 후 테스트에 있는 파일들이 클래스패스에 들어감 (덮어써짐)
+        * 프로덕션과 테스트 코드의 application.properties(yaml) 파일이 다른 경우
+          * 내용 유무나 값에 따라 실패할 수 있음
+          * 테스트만 실행시 테스트 경로의 application.properties(yaml) 파일로 덮어써지기 때문
+          
+* 프로퍼티 우선 순위
+  1. 유저 홈 디렉토리에 있는 spring-boot-dev-tools.properties(yaml)
+  2. 테스트에 있는 @TestPropertySource
+     * ``` @TestPropertySource(properties = "jaenyeong.name=jaenyeong2") ```
+     * @TestPropertySource 어노테이션의 locations 속성은 yaml 확장자 파일을 지원하지 않음
+       * ``` @TestPropertySource(locations = "classpath:/addJaenyeong.properties") ```
+       * ``` @TestPropertySource(properties = {"spring.config.location = classpath:/addJaenyeong2.yaml"}) ```
+         * yaml properties 속성 사용
+       * locations 속성으로 yaml 파일 지정시 별도 설정 필요
+  3. @SpringBootTest 어노테이션의 properties 애트리뷰트
+     * ``` @SpringBootTest(properties = "jaenyeong.name=jaenyeong3") ```
+  4. CLI Arguments (커맨드 라인 아규먼트)
+     * ``` java -jar springboot-started-1.0.0.jar --jaenyeong.name=jaenyeong ``` 
+  5. SPRING_APPLICATION_JSON (환경 변수 또는 시스템 프로퍼티)에 들어있는 프로퍼티
+     * ``` java -Dspring.application.json='{"name" : "jaenyeong"}' -jar springboot-started-1.0.0.jar ```
+     * ``` java -jar springboot-started-1.0.0.jar --spring.application.json='{"name" : "jaenyeong"}' ```
+     * java:comp/env/spring.application.json
+  6. ServletConfig 파라미터
+  7. ServletContext 파라미터
+  8. java:comp/env JNDI 애트리뷰트
+  9. System.getProperties() 자바 시스템 프로퍼티
+  10. OS 환경 변수
+  11. RandomValuePropertySource
+  12. JAR 밖에 있는 특정 프로파일용 application properties(yaml)
+  13. JAR 안에 있는 특정 프로파일용 application properties(yaml)
+  14. JAR 밖에 있는 application properties(yaml)
+  15. JAR 안에 있는 application properties(yaml)
+      * ``` jaenyeong.name = jaenyeong ```
+  16. @PropertySource
+  17. 기본 프로퍼티 (SpringApplication.setDefaultProperties)
+
+* application.properties 우선 순위 (높은 순위가 낮은 순위를 덮어씀)
+  1. file:./config/
+     * 우선순위 제일 높음
+     * 프로젝트 루트(또는 JAR 파일 실행 위치)에 config 디렉토리 생성, 그 안에 설정 파일을 위치 시킨 경우
+  2. file:./
+     * 프로젝트 루트(또는 JAR 파일 실행 위치)에 설정 파일을 위치 시킨 경우
+  3. classpath:/config/
+     * 클래스패스에 config 디렉토리 생성, 그 안에 설정 파일을 위치 시킨 경우
+  4. classpath:/
+     * 우선순위 제일 낮음
+     * 클래스패스에 설정 파일을 위치 시킨 경우
+
+* CLI 프로퍼티 disable 설정
+  * ``` SpringApplication.setAddCommandLineProperties(false);```
+
+* 랜덤값 설정
+  * 랜덤 변수 사용시 파라미터 사이에 공백 주의
+  * ${random.int(1,100)}
+  * ${random.*}
+
+* 플레이스 홀더 (application.properties(yaml) 파일 내 변수 재사용)
+  * name = jaenyeong
+  * fullName = ${name} kim
+
+* Type-Safe Property (타입-세이프 프로퍼티)
+  * 빈으로 등록하여 사용하는 방법
+    * 빈으로 등록해서 다른 빈에 주입할 수 있음
+      * @EnableConfigurationProperties
+      * @Component
+      * @Bean
+    * @ConfigurationProperties
+      * 프로퍼티로 사용할 클래스 선언 후 어노테이션 태깅 (값을 바인딩 받을 수 있는 상태)
+      * 사용할 수는 없는 상태 (빈 등록 필요)
+        * 메인 클래스에 태깅
+          * ``` @EnableConfigurationProperties(JaenyeongProperties.class) ```
+        * 프로퍼티용 클래스에 ``` @Component ``` 어노테이션 태깅하여 빈으로 등록
+  * 여러 프로퍼티를 묶어서 읽어올 수 있음
+  * Relaxed Binding (간편한 바인딩)
+    * context-path (케밥)
+    * context_path (언드스코어)
+    * contextPath (카멜)
+    * CONTEXTPATH
+  * 프로퍼티 타입 컨버전
+    * @DurationUnit
+      * ```
+        @DurationUnit(ChronoUnit.SECONDS)
+        private Duration sessionTimeout = Duration.ofSeconds(30);
+        ```
+      * @DurationUnit 어노테이션을 사용하지 않아도 프로퍼티 값 suffix가 s라면 바인딩 됨
+  * 프로퍼티 값 검증
+    * @Validated (프로퍼티 클래스에 태깅)
+      * @NotEmtpy (필드에 태깅)
+      * hibernate-validator 의존성 추가
+        * ``` implementation group: 'org.hibernate.validator', name: 'hibernate-validator' ```
+    * JSR-303 (@NotNull, ...)
+  * 메타 정보 생성
+  * @Value
+    * SpEL 을 사용할 수 있음
+    * 위에 있는 기능들은 전부 사용 못함

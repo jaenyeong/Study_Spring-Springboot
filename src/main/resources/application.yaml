@@ -9,7 +9,8 @@ spring:
 #    web-application-type: none
 
 server:
-  # 무작위 포트 설정
+  # 무작위 포트 설정 (무작위 포트 번호 설정시 random 변수 사용 금지)
+  # 권한이 없는 포트번호 또는 사용 중인 포트 번호 등을 선택할 수 있음
   #  port: 0
   port: 8443
   # [HTTPS - SSL 설정] 위 포트는 HTTPS
@@ -21,3 +22,15 @@ server:
     keyAlias: spring
   http2:
     enabled: true
+
+# 테스트 시 test/resources 경로에 있는 application.properties(yaml) 파일과 동일하게 맞춰줄 것
+jaenyeong:
+  name: jaenyeong
+  # 미리 정의된 random 변수 사용 (무작위 포트번호 설정시 사용하면 안됨)
+  # 권한이 없는 포트번호 또는 사용 중인 포트 번호 등을 선택할 수 있음
+  # 랜덤 변수 사용시 파라미터 사이에 공백 주의
+  age: ${random.int(1,100)}
+#  age: 12345
+  fullName: ${jaenyeong.name} Kim
+  sessionTimeout: 25s
+  nullParam:

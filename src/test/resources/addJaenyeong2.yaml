@@ -1,0 +1,6 @@
+jaenyeong:
+  name: testJaenyeongYaml
+  #  age: ${random.int}
+  age: 11111
+  fullName: ${jaenyeong.name} aaaaa
+  sessionTimeout: 25s
