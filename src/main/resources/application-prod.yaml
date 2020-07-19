@@ -1,0 +1,6 @@
+jaenyeong:
+  name: Prod Jaenyeong
+# 추가 프로파일 프로퍼티 설정
+spring:
+  profiles:
+    include: proddb

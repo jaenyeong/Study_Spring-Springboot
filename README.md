@@ -703,3 +703,24 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * @Value
     * SpEL 을 사용할 수 있음
     * 위에 있는 기능들은 전부 사용 못함
+
+#### 프로파일
+* 프로파일 어노테이션
+  * @Configuration
+  * @Component
+
+* 프로파일 활성화
+  * spring.profiles.active=test
+  * CLI
+    * CLI 프로퍼티가 우선 순위가 높기 때문에 프로퍼티 파일에 test로 설정되어 있어도 prod로 실행됨
+    * ``` java -jar springboot-started-1.0.0.jar --spring.profiles.active=prod ```
+  * IDEA
+    * Run/Debug Configurations에 Program arguments 옵션에 ``` --spring.profiles.active=prod ``` 설정
+* 프로파일 추가
+  * spring.profiles.include=proddb
+    * application-proddb.properties 파일 생성
+    * 추가 프로파일 프로퍼티 설정
+* 프로파일용 프로퍼티 생성
+  * application-{profile}.properties
+    * application-prod.properties, application-test.properties 파일 생성
+  * 프로파일용 프로퍼티 파일이 기본 프로퍼티 파일보다 우선 순위가 높음

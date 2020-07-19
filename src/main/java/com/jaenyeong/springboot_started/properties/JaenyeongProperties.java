@@ -27,8 +27,10 @@ public class JaenyeongProperties {
 	private Duration sessionTimeout = Duration.ofSeconds(30);
 
 	// 빈값 확인
-	@NotEmpty
+//	@NotEmpty
 	private String nullParam;
+
+	private String proddb;
 
 	public String getName() {
 		return name;
@@ -72,6 +74,15 @@ public class JaenyeongProperties {
 
 	public JaenyeongProperties setNullParam(String nullParam) {
 		this.nullParam = nullParam;
+		return this;
+	}
+
+	public String getProddb() {
+		return proddb;
+	}
+
+	public JaenyeongProperties setProddb(String proddb) {
+		this.proddb = proddb;
 		return this;
 	}
 }
