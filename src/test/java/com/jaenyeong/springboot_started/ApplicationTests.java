@@ -57,6 +57,5 @@ public class ApplicationTests {
 
 				// addJaenyeong2.yaml 설정 파일 사용
 				.isEqualTo("11111");
-
 	}
 }

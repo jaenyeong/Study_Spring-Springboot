@@ -821,3 +821,87 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     * 로그파일 설정 내용 작성
   * application.properties(yaml) 파일 설정
     * logging.config = classpath:log4j2-spring.yaml
+
+#### 테스트
+* spring-boot-starter-test 추가
+  * log4j2 사용시 spring-boot-starter-test에 SLF4j 의존성 제거
+    * ``` exclude module: "spring-boot-starter-logging" ```
+
+* @SpringBootTest
+  * @RunWith(SpringRunner.class)랑 같이 써야 함
+  * 서블릿 컨테이너를 mock up 해서 mocking된 디스패처 서블릿이 로딩  
+    진짜 디스패처 서블릿에게 요청을 보내는 것을 흉내냄 (mocking된 디스패처 서블릿에게 요청)  
+    이 때 반드시 MockMvc 클라이언트를 사용해야 함 이를 위해 @AutoConfigureMockMvc 어노테이션 태깅  
+    ``` @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK) ```  
+    ``` @AutoConfigureMockMvc ```  
+  * 빈 설정 파일은 자동으로 찾아줌 (@SpringBootApplication)
+    *  @SpringBootApplication을 찾아가 하위 디렉토리까지 존재하는 모든 빈 스캔, 등록
+    * @MockBean 어노테이션 태깅한 객체만 목으로 교체ㄴ
+  * WebEnvironment
+    * MOCK
+      * mock servlet environment. 내장 톰캣 구동 안 함
+      * ``` @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK ```
+    * RANDON_PORT, DEFINED_PORT
+      * 실제 내장 톰캣 사용
+      * RestTemplate, TestRestTemplate, WebClient, WebTestClient 등을 사용해야 함
+      * 랜덤 포트로 테스트시 기존 application.properties(yaml) 파일(테스트 경로)에 서버 설정 주석처리 필요
+      * ``` @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) ```
+    * NONE
+      * 서블릿 환경 제공 안 함
+  * 웹 요청 객체
+    * MockMvc (Server side test)
+      * 테스트 클래스에 ``` @AutoConfigureMockMvc ``` 어노테이션 태깅
+      * ```
+        @Autowired
+        MockMvc mockMvc;
+        ```
+    * TestRestTemplate (Rest Client side test)
+      * ```
+        @Autowired
+        TestRestTemplate testRestTemplate;
+        ```
+    * WebTestClient (스프링5 웹플럭스에 추가됨)
+      * 비동기 요청으로 테스트
+      * WebFlux 의존성 추가
+        * ```
+          implementation('org.springframework.boot:spring-boot-starter-webflux') {
+              exclude module: 'spring-boot-starter-logging'
+          }
+          ```
+
+* @MockBean
+  * ApplicationContext에 들어있는 빈을 Mock으로 만든 객체로 교체
+  * 모든 @Test 마다 자동으로 리셋
+  * ```
+    @MockBean
+    SampleService mockSampleService;
+    ```
+
+* 슬라이스 테스트
+  * 레이어 별로 잘라서 테스트할 때 
+  * @JsonTest
+    * Json 테스트 용도
+  * @WebMvcTest
+    * 컨트롤러 관련 빈만 등록됨
+      * @Controller
+      * @ControllerAdvice
+      * @JsonComponent
+      * Converter, GenericConverter, Filter, WebMvcConfigurer, HandlerMethodArgumentResolver
+    * 해당 어노테이션은 내부 객체조차 주입되지 않기 때문에 내부 객체 사용시 주입 필요
+      * @Service, @Repository와 같은 일반적인 빈은 등록되지 않음
+  * @WebFluxTest
+  * @DataJpaTest
+    * @Repository만 빈 등록
+  * 기타
+
+* 테스트 유틸
+  * OutputCaptureRule
+    * 로그 포함 콘솔에 찍힌 모든 데이터를 캡처
+    * public으로 선언할 것
+    * ```
+      @Rule
+      public OutputCaptureRule outputCaptureRule;
+      ```
+  * TestPropertyValues
+  * TestRestTemplate
+  * ConfigFileApplicationContextInitializer

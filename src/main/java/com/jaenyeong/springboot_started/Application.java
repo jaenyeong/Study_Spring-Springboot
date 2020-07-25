@@ -6,17 +6,9 @@ package com.jaenyeong.springboot_started;
 
 //import org.springframework.boot.Banner;
 
-import com.jaenyeong.springboot_started.properties.JaenyeongProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 //import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -33,18 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 //@Configuration
 //@ComponentScan
 //@EnableAutoConfiguration
-@RestController
 
 // 프로퍼티 설정 (빈 등록, @ConfigurationProperties 어노테이션 처리)
 // 아래 어노테이션은 자동으로 되어 있음
 //@EnableConfigurationProperties(JaenyeongProperties.class)
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
-
-	@GetMapping("/hello")
-	public String hello() {
-		return "Hello Spring";
-	}
 
 	// 외부, 서드파티에 프로퍼티 설정이 있는 경우
 //	@ConfigurationProperties("server")

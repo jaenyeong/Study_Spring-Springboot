@@ -1,6 +1,20 @@
+spring:
+  profiles:
+    active: test
+
 jaenyeong:
   name: testJaenyeongYaml
   #  age: ${random.int}
   age: 11111
   fullName: ${jaenyeong.name} aaaaa
   sessionTimeout: 25s
+
+logging:
+  file:
+    path: logs
+  level:
+    #    org:
+    #      springframework: debug
+    com:
+      jaenyeong: info
+  config: classpath:log4j2-spring.yaml

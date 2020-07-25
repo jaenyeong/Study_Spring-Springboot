@@ -8,6 +8,7 @@ buildscript {
 plugins {
     // [자동 설정] 메이븐 로컬 저장소로 스프링부트 커스터마이징 설정파일 아티팩트 추출시 스프링 의존성 주석처리
     id 'org.springframework.boot' version '2.3.1.RELEASE'
+    // [자동 설정] 메이븐 로컬 저장소로 스프링부트 커스터마이징 설정파일 아티팩트 추출시 스프링 의존성 주석처리
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
     id 'idea'
@@ -34,6 +35,9 @@ repositories {
 configurations {
     optional
     compile.extendsFrom optional
+//    all {
+//        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+//    }
 }
 
 publishing {
@@ -55,11 +59,11 @@ dependencies {
     // [자동 설정] - 메이븐 로컬 저장소로 스프링부트 커스터마이징 설정파일 아티팩트 추출시 스프링 의존성 주석처리
     implementation('org.springframework.boot:spring-boot-starter-web') {
         // 톰캣 제거
-        exclude module: "spring-boot-starter-tomcat"
+        exclude module: 'spring-boot-starter-tomcat'
 //        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 
         // loggig 제거
-        exclude module: "spring-boot-starter-logging"
+        exclude module: 'spring-boot-starter-logging'
     }
     // 톰캣을 제거 하고 제티(jetty)
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '2.3.1.RELEASE'
@@ -69,6 +73,8 @@ dependencies {
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        // 테스트를 위해 loggig 제거
+        exclude module: "spring-boot-starter-logging"
     }
 
     // Spring Data JPA
@@ -96,6 +102,11 @@ dependencies {
 
     // log4j2으로 변경
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.3.1.RELEASE'
+
+    // 테스트에서 WebTestClient 사용
+    implementation('org.springframework.boot:spring-boot-starter-webflux') {
+        exclude module: 'spring-boot-starter-logging'
+    }
 }
 
 test {
