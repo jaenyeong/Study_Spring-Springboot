@@ -999,3 +999,31 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * ```
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.11.1'
     ```
+
+#### 정적 리소스 지원
+* 정적 리소스 맵핑 "/**"
+  * 기본 리소스 위치 ("/hello.html" => /static/hello.html)
+    * classpath:/static/
+    * classpath:/public/
+    * classpath:/resources/
+    * classpath:/META-INF/resources
+
+* spring.mvc.static-path-pattern
+  * 맵핑 설정 변경 가능
+  * spring.mvc.static-path-pattern = /static/** 설정시 localhost:8888/static/hello.html URI로 요청
+* spring.mvc.static-locations
+  * 리소스 찾을 위치 변경 가능
+
+* Last-Modified 헤더를 보고 304 응답을 전송
+
+* ResourceHttpRequestHandler 처리
+  * WebMvcConfigurer의 addResourceHandlers로 커스터마이징 가능
+  * public class WebConfig implements WebMvcConfigurer 파일에 리소스 핸들러 추가
+  * ```
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/jn/**")
+        .addResourceLocations("classpath:/jn/")
+        .setCachePeriod(20);
+    }
+    ```
