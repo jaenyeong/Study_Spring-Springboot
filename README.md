@@ -1072,3 +1072,43 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     * 파비콘이 변경되지 않는 경우
       * https://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh
       * ``` <link rel="icon" href="http://www.yoursite.com/favicon.ico?v=2" /> ```
+
+#### Thymeleaf
+* 템플릿 엔진
+  * 뷰 생성
+  * 코드 제너레이션
+  * 이메일 템플릿 등
+
+* 스프링 부트가 자동 설정을 지원하는 템플릿 엔진
+  * FreeMarker
+  * Groovy
+  * Thymeleaf
+  * Mustache
+
+* JSP 사용을 권장하지 않는 이유
+  * JAR 패키징 할 때는 동작 안함 (WAR 패키징 해야 함)
+  * Undertow는 JSP를 지원하지 않음
+
+* Thymeleaf 사용
+  * 의존성 추가
+    * spring-boot-starter-thymeleaf
+    * ``` implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf' ```
+    * Could not find ognl-3.1.12.jar (ognl:ognl:3.1.12) 에러 발생으로 ognl 의존성 추가
+    * ``` implementation group: 'ognl', name: 'ognl', version: '3.2.14' ```
+  * 템플릿 파일 위치
+    * /src/main/resources/template/
+  * html 파일에 추가
+    * ``` <html xmlns:th="http://www.thymeleaf.org"> ```
+
+* 테스트에서 log4j2 충돌 에러
+  * build.gradle에서 spring-boot-starter-logging 의존성 제거
+  * ```
+    configurations {
+        optional
+        compile.extendsFrom optional
+        // log4j2 사용시 전체에서 기존 로깅 의존성을 제거
+        all {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        }
+    }
+    ```

@@ -35,9 +35,10 @@ repositories {
 configurations {
     optional
     compile.extendsFrom optional
-//    all {
-//        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-//    }
+    // log4j2 사용시 전체에서 기존 로깅 의존성을 제거
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
 }
 
 publishing {
@@ -118,6 +119,11 @@ dependencies {
     // WebJAR
     implementation group: 'org.webjars.bower', name: 'jquery', version: '3.5.1'
     implementation group: 'org.webjars', name: 'webjars-locator-core', version: '0.46'
+
+    // Thymeleaf 추가시 Could not find ognl-3.1.12.jar 에러로 인해 의존성 추가
+    implementation group: 'ognl', name: 'ognl', version: '3.2.14'
+    // Thymeleaf
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
 }
 
 test {
