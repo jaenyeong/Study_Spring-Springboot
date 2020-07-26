@@ -159,6 +159,15 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * Holoman properties 설정 파일에 어노테이션 사용을 위하여 의존성 추가
     * ``` annotationProcessor "org.springframework.boot:spring-boot-configuration-processor" ```
 
+* 리턴하는 객체의 클래스가 public static 팩토리 메서드를 작성할 시점에 반드시 존재하지 않아도 됨
+  * 이러한 유연성을 제공하는 static 팩토리 메서드는 서비스 프로바이더 프레임워크의 근본
+  * 서비스 프로바이더 프레임워크는 아래 세가지가 필요
+    * 서비스의 구현체를 대표하는 서비스 인터페이스
+    * 구현체를 등록하는데 사용하는 프로바이더 등록 API
+    * 클라이언트가 해당 서비스의 인스턴스를 가져갈 때 사용하는 서비스 액세스 API
+  * 부가적으로, 서비스 인터페이스의 인스턴스를 제공하는 서비스 프로바이더 인터페이스를 만들 수도 있음
+    * 하지만 그게 없는 경우에는 리플렉션을 사용해 구현체를 만들어줌
+
 #### 내장 웹 서버
 * 스프링 부트는 서버가 아님
   * 톰캣 객체 생성
@@ -905,3 +914,36 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * TestPropertyValues
   * TestRestTemplate
   * ConfigFileApplicationContextInitializer
+
+#### Spring-Boot-Devtools
+* 의존성 추가
+  * ``` implementation group: 'org.springframework.boot', name: 'spring-boot-devtools' ```
+
+* 기존 Holoman 의존성과 충돌로 인하여 주석처리
+  * ``` com.jaenyeong.springboot_started.auto_configure ```
+
+* 캐시 설정을 개발 환경에 맞게 변경
+
+* 클래스패스에 있는 파일이 변경 될 때마다 자동으로 재시작
+  * 앱 또는 톰캣과 같은 was를 직접 on/off (cold starts) 하는 것 보다 빠름
+    * 클래스로더를 2개 사용
+      * base classloader
+        * 의존성(라이브러리) 클래스 로더
+      * restart classloader
+        * 애플리케이션 클래스 로더
+  * 리로딩 보다는 느림 (JRebel 같은건 아님)
+  * 리스타트 하고 싶지 않은 리소스 설정
+    * spring.devtools.restart.exclude
+  * 리스타트 기능 off (리스타트는 서버를 재시작)
+    * spring.devtools.restart.enabled = false
+
+* 라이브 리로드 리스타트 했을 때 브라우저 자동 갱신(리프레시) 하는 기능
+  * 브라우저 플러그인 설치 필요
+  * 라이브 리로드 서버 off
+    * spring.devtools.liveload.enabled = false
+* 글로벌 설정
+  * ~/.spring-boot-devtools.properties
+  * 우선순위가 제일 높음
+* 리모트 애플리케이션
+  * 원격에 앱 로딩후 로컬에서 실행
+  * 프로덕션으로 사용하면 위험하기 때문에 개발 용도로만 사용 권장

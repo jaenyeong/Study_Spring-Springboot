@@ -1,2 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.jaenyeong.springboot_started.auto_configure.HolomanConfigurationBack
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#  com.jaenyeong.springboot_started.auto_configure.HolomanConfigurationBack

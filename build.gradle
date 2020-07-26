@@ -74,7 +74,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         // 테스트를 위해 loggig 제거
-        exclude module: "spring-boot-starter-logging"
+        exclude module: 'spring-boot-starter-logging'
     }
 
     // Spring Data JPA
@@ -92,9 +92,10 @@ dependencies {
 //    compileOnly group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: '2.3.1.RELEASE', ext: 'pom'
 
     // Holoman properties 설정 파일에 어노테이션 사용을 위하여 의존성 추가
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     // 로컬 저장소에 저장되어 있는 새로 생성한 자동 설정 파일 추가
+    // spring devtools 의존성 추가시 HolomanProperties 파일을 찾지 못하여 주석 처리
     implementation group: 'com.jaenyeong.springboot_started.auto_configure', name: 'noah-artifact', version: '1.0.0'
 
     // 프로퍼티 validator 용도
@@ -107,6 +108,9 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-webflux') {
         exclude module: 'spring-boot-starter-logging'
     }
+
+    // Spring boot devtools
+//    implementation  group: 'org.springframework.boot', name: 'spring-boot-devtools'
 }
 
 test {

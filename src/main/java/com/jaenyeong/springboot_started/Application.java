@@ -6,9 +6,11 @@ package com.jaenyeong.springboot_started;
 
 //import org.springframework.boot.Banner;
 
+import com.jaenyeong.springboot_started.auto_configure.HolomanProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 //import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -29,6 +31,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // 프로퍼티 설정 (빈 등록, @ConfigurationProperties 어노테이션 처리)
 // 아래 어노테이션은 자동으로 되어 있음
 //@EnableConfigurationProperties(JaenyeongProperties.class)
+@EnableConfigurationProperties(HolomanProperties.class)
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
 
@@ -78,8 +81,8 @@ public class Application {
 	// 앱 타입 설정
 	private static void setWebApplicationType(String[] args) {
 		SpringApplication application = new SpringApplication(Application.class);
-//		application.setWebApplicationType(WebApplicationType.SERVLET);
-		application.setWebApplicationType(WebApplicationType.NONE);
+		application.setWebApplicationType(WebApplicationType.SERVLET);
+//		application.setWebApplicationType(WebApplicationType.NONE);
 //		application.setWebApplicationType(WebApplicationType.REACTIVE);
 		application.run(args);
 	}

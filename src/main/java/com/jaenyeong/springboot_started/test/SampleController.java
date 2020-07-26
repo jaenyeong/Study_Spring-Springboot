@@ -21,4 +21,9 @@ public class SampleController {
 		System.out.println("ABC");
 		return "Hello Spring " + sampleService.getName();
 	}
+
+	@GetMapping("/devtools")
+	public String devtools() {
+		return "Devtools";
+	}
 }

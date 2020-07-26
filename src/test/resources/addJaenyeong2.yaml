@@ -1,3 +1,7 @@
+holoman:
+  name: Hello holoman
+  how-long: 777
+
 spring:
   profiles:
     active: test
