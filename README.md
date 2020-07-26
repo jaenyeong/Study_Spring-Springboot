@@ -1058,3 +1058,17 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         });
     </script>
     ```
+
+#### Index page, Favicon
+* welcome page (루트 경로로 요청시 제공되는 페이지 - main page)
+  * 설정된 리소스 경로 하위에 보관
+  * index.html 찾아 제공
+  * index.템플릿 찾아 제공
+  * 둘 다 없으면 에러 페이지
+
+* favicon
+  * favicon.ico
+    * 파이콘 만들기 https://favicon.io/
+    * 파비콘이 변경되지 않는 경우
+      * https://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh
+      * ``` <link rel="icon" href="http://www.yoursite.com/favicon.ico?v=2" /> ```
