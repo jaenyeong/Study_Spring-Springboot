@@ -1113,3 +1113,32 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         }
     }
     ```
+
+#### HtmlUnit
+* GUI가 없는 자바 프로그램
+  * HTML 문서 모델링
+  * 페이지 호출 API 제공
+  * JUnit 또는 TestNG에서 사용하는 테스트 목적으로 브라우저 시뮬레이션 방법
+
+* HTML 뷰 템플릿 테스트
+
+* 의존성 추가
+  * ``` testImplementation group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.42.0' ```
+  * ``` testImplementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.42.0' ```
+  * Could not find commons-lang3-3.10.jar 에러로 인해 의존성 추가
+  * ``` testImplementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11' ```
+
+* 사용
+  * ```
+    @Autowired
+    WebClient webClient;
+    
+    @Test
+    public void hello() throws Exception {
+        HtmlPage page = webClient.getPage("/htmlunit/hello");
+        HtmlHeading1 h1 = page.getFirstByXPath("//h1");
+
+        assertThat(h1.getTextContent()).isEqualToIgnoringCase("jaenyeong");
+    }
+    ```
+  * WebClient가 MockMvc를 사용

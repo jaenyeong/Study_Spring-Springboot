@@ -34,6 +34,8 @@ public class ThymeleafControllerTest {
 				.andExpect(model().attribute("name", is("jaenyeong")))
 				// 뷰 안에 렌더링된 내용 확인
 				.andExpect(content().string(containsString("Noah")))
-				.andExpect(content().string(containsString("jaenyeong")));
+				.andExpect(content().string(containsString("jaenyeong")))
+				// xPath
+				.andExpect(xpath("//h1").string("jaenyeong"));
 	}
 }
