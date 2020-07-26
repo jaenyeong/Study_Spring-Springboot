@@ -111,6 +111,9 @@ dependencies {
 
     // Spring boot devtools
 //    implementation  group: 'org.springframework.boot', name: 'spring-boot-devtools'
+
+    // XML 메세지 컨버터 추가
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.11.1'
 }
 
 test {

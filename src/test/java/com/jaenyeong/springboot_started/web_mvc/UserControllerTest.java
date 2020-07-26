@@ -45,4 +45,19 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.age"
 						, is(equalTo(20))));
 	}
+
+	// ContentNegotiationViewResolver 테스트
+	@Test
+	public void createUserXML() throws Exception {
+		String userJson = "{\"userName\" : \"jaenyeong\", \"age\": \"20\"}";
+		mockMvc.perform(
+				post("/users/create")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_XML)
+						.content(userJson))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(xpath("/User/userName").string("jaenyeong"))
+				.andExpect(xpath("/User/age").string("20"));
+	}
 }

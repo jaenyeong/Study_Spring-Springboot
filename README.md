@@ -984,3 +984,18 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * @ResponseBody와 같이 사용
 * @RestController = @Controller + @ResponseBody
   * int, String 등은 String 메세지 컨버터가 사용됨
+
+#### ViewResolver
+* 스프링 부트 뷰 리졸버 설정 제공
+  * HttpMessageConvertersAutoConfiguration
+
+* ContentNegotiationViewResolver
+  * 들어오는 요청 accept 헤더에 따라 응답이 달라짐
+  * accept 헤더는 클라이언트(브라우저)가 서버측으로부터 원하는 응답 본문 타입을 알려주는 것
+  * accept 헤더가 없는 경우 format이라는 query parameter 사용 ("/path?format=pdf")
+* BeanNameViewResolver
+
+* XML 메세지 컨버터 추가
+  * ```
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.11.1'
+    ```
