@@ -947,3 +947,27 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 * 리모트 애플리케이션
   * 원격에 앱 로딩후 로컬에서 실행
   * 프로덕션으로 사용하면 위험하기 때문에 개발 용도로만 사용 권장
+
+### Spring Web MVC
+* 스프링 웹 MVC
+* 스프링 부트 MVC
+  * 자동 설정으로 제공하는 여러 기본 기능
+* 스프링 MVC 확장
+  * @Configuration + implements WebMvcConfigurer
+  * 설정을 추가
+* 스프링 MVC 재정의
+  * @Configuration + implements WebMvcConfigurer + @EnableWebMvc
+  * 기존 스프링 부트가 제공하는 자동 설정을 사용 하지 않는 것
+  * 가급적 사용하지 않기를 권장
+
+* 스프링 부트가 제공하는 자동 설정
+  * spring-boot-autoconfigure 모듈에 spring.factories 파일 > WebMvcAutoConfiguration 클래스
+
+* OrderedHiddenHttpMethodFilter
+  * 스프링 3 이후부터 제공
+  * _method 파라미터로 메서드 타입을 확인 가능
+  * @GetMapping 등을 사용할 수 있게 도와주는 필터
+
+* HttpPutFormContentFilter
+  * Post 요청만 폼 데이터를 보낼 수 있음
+    * PUT, PATCH 요청이 application/x-www-form-urlencoded

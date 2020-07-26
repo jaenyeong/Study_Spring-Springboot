@@ -1,0 +1,13 @@
+package com.jaenyeong.springboot_started.web_mvc;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class UserController {
+	
+	@GetMapping("/user")
+	public String user() {
+		return "user";
+	}
+}
