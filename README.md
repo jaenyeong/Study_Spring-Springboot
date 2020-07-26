@@ -971,3 +971,16 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 * HttpPutFormContentFilter
   * Post 요청만 폼 데이터를 보낼 수 있음
     * PUT, PATCH 요청이 application/x-www-form-urlencoded
+
+#### HttpMessageConverters
+* 스프링에서 제공하는 인터페이스 (Spring WebMvc의 일부분)
+* HTTP 요청 본문을 객체로 변경 또는 객체를 HTTP 응답 본문으로 변경할 때 사용
+* {“username”:”keesun”, “password”:”123”} <-> User
+  * @ReuqestBody
+  * @ResponseBody
+
+* @Controller
+  * 사용시 뷰네임으로 판단하여 뷰리졸버가 뷰를 찾음
+  * @ResponseBody와 같이 사용
+* @RestController = @Controller + @ResponseBody
+  * int, String 등은 String 메세지 컨버터가 사용됨
