@@ -1027,3 +1027,34 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         .setCachePeriod(20);
     }
     ```
+
+#### Web JAR
+* WebJars는 JAR (Java Archive) 파일로 패키지 된 클라이언트 사이드 웹 라이브러리
+  * 다시 말하면 클라이언트 사이드에서 사용하는 웹 라이브러리를 JAR로 패키징한 것
+    * 예를 들어 jQuery, Bootstrap 등
+  * 특징
+    * JVM 기반의 웹앱에서 클라이언트 사이드 의존성을 명시적이고 손쉽게 관리
+    * 빌드도구는 웹라이브러리 버전을 인식
+    * 모든 클라이언트 사이드 의존성(기능)을 메이븐 중앙저장소(Maven Central)에서 다운, 사용, 배포 가능
+    * 사용하고 있는 클라이언트 사이드 의존성 파악 용이
+    * 수동적인 종속성을 자동으로 해결 및 선택적으로 RequireJS를 통해 적재
+    * JSDELIVR에서 제공하는 공개 CDN 사용 가능
+    
+* 의존성 추가
+  * ``` implementation group: 'org.webjars.bower', name: 'jquery', version: '3.5.1' ```
+
+* 웹JAR 맵핑 "/webjars/**"
+  * 버전 생략하고 사용시 webjars-locator-core 의존성 추가
+    * ``` implementation group: 'org.webjars', name: 'webjars-locator-core', version: '0.46' ```
+    * 리소스 체이닝
+  * ```
+    <!--<script src="/webjars/jquery/3.5.1/dist/jquery.min.js"></script>-->
+    
+    <!-- webjars-locator-core 의존성 추가-->
+    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(function() {
+            console.log("ready!");
+        });
+    </script>
+    ```
