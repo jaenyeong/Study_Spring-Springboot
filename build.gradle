@@ -130,6 +130,10 @@ dependencies {
     // HtmlUnit
     testImplementation group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.42.0'
     testImplementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.42.0'
+
+    // Spring HATEOAS
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-hateoas
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
 }
 
 test {

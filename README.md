@@ -1166,3 +1166,48 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * 404.html (상태 지정 값)
   * 5xx.html (상태 묶음 값)
   * ErrorViewResolver 구현
+
+#### Spring HATEOAS
+* HATEOAS
+  * Hypermedia As The Engine Of Application State
+    * REST 아키텍처의 구성 요소
+    * 클라이언트가 서버에 의해 제공되는 동적 하이퍼미디어를 통해 네트워크 응용 프로그램과 상호작용하는 것
+  * 서버
+    * 현재 리소스와 연관된 링크 정보를 클라이언트에게 제공
+  * 클라이언트
+    * 연관된 링크 정보를 바탕으로 리소스에 접근
+
+* Spring HATEOAS
+  * 스프링에서 HATEOAS를 간편하게 사용할 수 있게 도와주는 도구
+
+* 의존성 추가
+  * ``` implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas' ```
+
+* ObjectMapper 제공
+  * @Autowired로 사용 가능
+  * application.properties(yaml) 파일에서 설정 가능
+    * spring.jackson.*
+  * Jackson2ObjectMapperBuilder
+
+* LinkDiscovers 제공
+  * 클라이언트 사이드에서 링크 정보를 Rel 이름으로 찾을때 사용할 수 있는 XPath 확장 클래스
+
+* 버전 변경으로 강의와 사용법이 달라짐
+  * ```
+    import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+    import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+    ```
+  * ```
+    @GetMapping("/hateoas/hello")
+    public EntityModel<Hello> hello() {
+        Hello hello = new Hello();
+        hello.setPrefix("Hey,");
+        hello.setName("jaenyeong");
+
+        EntityModel<Hello> entityModel = EntityModel.of(hello);
+        Link link = linkTo(methodOn(HateoasController.class).hello()).withSelfRel();
+        entityModel.add(link);
+
+        return entityModel;
+    }
+    ```
