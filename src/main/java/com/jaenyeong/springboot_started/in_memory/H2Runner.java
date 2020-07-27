@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.Statement;
+//import java.sql.Statement;
 
 @Component
 public class H2Runner implements ApplicationRunner {
@@ -29,13 +29,14 @@ public class H2Runner implements ApplicationRunner {
 
 			System.out.println("DataSource Connection url : " + url);
 			System.out.println("DataSource Connection userName : " + userName);
+			System.out.println("DataSource Connection type : " + dataSource.getClass());
 
-			Statement statement = connection.createStatement();
-			String createSql = "CREATE TABLE USER (ID INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id))";
-			statement.executeUpdate(createSql);
-
-			String insertSql = "INSERT INTO USER VALUES (1, 'jaenyeong')";
-			jdbcTemplate.execute(insertSql);
+//			Statement statement = connection.createStatement();
+//			String createSql = "CREATE TABLE USER (ID INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id))";
+//			statement.executeUpdate(createSql);
+//
+//			String insertSql = "INSERT INTO USER VALUES (1, 'jaenyeong')";
+//			jdbcTemplate.execute(insertSql);
 
 		} catch (Exception e) {
 			e.printStackTrace();

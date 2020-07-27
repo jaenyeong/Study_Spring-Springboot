@@ -140,6 +140,11 @@ dependencies {
     // IN-memory DB (Spring JDBC, H2)
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
     implementation group: 'com.h2database', name: 'h2'
+//    testImplementation group: 'com.h2database', name: 'h2'
+
+    // MySQL 커넥터 (MySQL 버전에 따라 5.* 버전 에러)
+//    implementation group: 'MySQL', name: 'mysql-connector-java', version: '5.1.40'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
 }
 
 test {

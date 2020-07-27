@@ -1333,3 +1333,59 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         }
     }
     ```
+
+#### MySQL
+* DataSource
+  * 데이터 소스는 서버로부터 데이터베이스에 대해 연결을 구축하기 위해 사용되는 이름
+  * 커넥션 풀을 관리하는 목적으로 사용되는 객체
+    * 커넥션 풀을 각각의 앱에서 직접 이용하면 관리가 어려움
+    * 체계적인 관리를 위해 데이터 소스라는 개념을 도입하여 사용
+
+* 지원 DBCP (Database connection pool)
+  * HikariCP (기본)
+    * autocommit (기본 true)
+      * 별도 커밋을 하지 않아도 커밋됨
+    * connectionTimeout (기본 30초)
+      * 연결 제한 시간
+    * MaximumPoolSize (기본 10개)
+      * 실제로 동시에 일할 수 있는 커넥션은 CPU의 코어 수와 동일
+  * Tomcat CP
+  * Commons DBCP2
+
+* DBCP 설정
+  * spring.datasource.hikari.*
+  * spring.datasource.tomcat.*
+  * spring.datasource.dbcp2.*
+
+* 의존성 추가
+  * MySQL 커넥터 (DataSource 구현체)
+  * ``` implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21' ```
+
+* MySQL 추가 (도커 사용)
+  * ```
+    docker run -p 3306:3306 --name mysql_boot -e MYSQL_ROOT_PASSWORD=1234 -e \
+    MYSQL_DATABASE=springboot -e MYSQL_USER=jaenyeong -e MYSQL_PASSWORD=pass -d mysql
+    ```
+  * ``` docker exec -i -t mysql_boot bash ```
+  * ``` mysql -u root -p ```
+
+* MySQL용 Datasource 설정
+  * spring.datasource.type = com.zaxxer.hikari.HikariDataSource
+  * spring.datasource.hikari.driver-class-name = com.mysql.cj.jdbc.Driver
+  * spring.datasource.hikari.maximum-pool-size = 4
+  * spring.datasource.url = jdbc:mysql://localhost:3306/springboot?useSSL=false
+  * spring.datasource.username = jaenyeong
+  * spring.datasource.password = pass
+
+* MySQL 접속에러
+  * 5.* 버전
+    * jdbc:mysql://localhost:3306/springboot?useSSL=false
+  * 8.* 버전
+    * jdbc:mysql://localhost:3306/springboot?useSSL=false&allowPublicKeyRetrieval=true
+
+* 예제
+  * in_memory 패키지 H2Runner 클래스로 콘솔에 출력된 데이터 소스 정보 확인
+
+* MySQL 라이센스 (GPL) 주의
+  * MySQL 대신 MariaDB 사용 검토
+  * 소스 코드 공개 의무 여부 확인

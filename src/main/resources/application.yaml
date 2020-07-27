@@ -17,6 +17,14 @@ spring:
   h2:
     console:
       enabled: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 4
+    url: jdbc:mysql://localhost:3306/springboot?useSSL=false&allowPublicKeyRetrieval=true
+    username: jaenyeong
+    password: pass
 
 server:
   # 무작위 포트 설정 (무작위 포트 번호 설정시 random 변수 사용 금지)
