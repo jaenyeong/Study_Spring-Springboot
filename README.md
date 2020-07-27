@@ -1142,3 +1142,27 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     }
     ```
   * WebClient가 MockMvc를 사용
+
+#### ExceptionHandler
+* 스프링 @MVC 예외 처리 방법
+  * @ExceptionHandler
+    * 예외 발생시 적용됨
+    * 한 컨트롤러 안에 있는 경우 해당 컨트롤러에만 적용됨
+  * @ControllerAdvice
+    * 모든 컨트롤러에 적용시 새 컨트롤러 클래스에 해당 어노테이션 태깅
+    * 그 안에서 @ExceptionHandler 선언
+
+* 기존 예제에서 XML 메세지 컨버터 사용으로 인해서 json 타입이 아닌 XML 타입으로 반환됨
+
+* 스프링 부트가 제공하는 기본 예외 처리기
+  * BasicErrorController
+    * HTML과 JSON 응답 지원
+  * 커스터마이징 방법
+    * ErrorController 구현하여 빈으로 등록
+
+* 커스텀 에러 페이지
+  * 상태 코드 값에 따라 에러 페이지 보여주기
+  * src/main/resources/static|template/error/
+  * 404.html (상태 지정 값)
+  * 5xx.html (상태 묶음 값)
+  * ErrorViewResolver 구현
