@@ -1256,3 +1256,80 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         })
     </script>
     ```
+
+### Spring Data
+* 파트
+  * SQL DB
+  * NoSQL
+
+#### In-memory database
+* 지원하는 인-메모리 데이터베이스
+  * H2 (추천 - 콘솔 등에 이유로)
+  * HSQL
+  * Derby
+
+* Spring-JDBC가 클래스패스에 있으면 자동 설정이 필요한 빈을 설정 해줌
+  * DataSource
+  * JdbcTemplate
+
+* 의존성 추가
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.3.2.RELEASE'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    ```
+
+* 인-메모리 데이터베이스 기본 연결 정보 (DataSourceProperties 안에 있음)
+  * URL: "testdb"
+  * username: "sa"
+  * password: ""
+
+* H2 콘솔 사용하는 방법
+  * 설정 (선택)
+    * spring-boot-devtools 의존성 추가
+    * application.properties(yaml) 파일에 spring.h2.console.enabled=true 설정 추가
+  * 사용
+    * localhost:8080/h2-console로 접속 (경로 변경 가능)
+    * 접속 정보 확인
+      * Driver Class
+        * org.h2.Driver
+      * JDBC URL
+        * jdbc:h2:mem:testdb
+        * 위 값이 아닌 경우 콘솔 출력 값 삽입 ``` DataSource.getConnection()getMetaData().getURL(); ```
+          * jdbc:h2:mem:4aacff7d-4e29-452c-a557-aab65d49c1d2
+      * User Name
+        * sa
+      * Password
+        * (빈 값)
+
+* 예제 코드
+  * ``` CREATE TABLE USER (ID INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id)) ```
+  * ``` INSERT INTO USER VALUES (1, 'jaenyeong') ```
+  * ```
+    @Autowired
+    DataSource dataSource;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        try (Connection connection = dataSource.getConnection()) {
+
+            String url = connection.getMetaData().getURL();
+            String userName = connection.getMetaData().getUserName();
+
+            System.out.println("DataSource Connection url : " + url);
+            System.out.println("DataSource Connection userName : " + userName);
+
+            Statement statement = connection.createStatement();
+            String createSql = "CREATE TABLE USER (ID INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id))";
+            statement.executeUpdate(createSql);
+
+            String insertSql = "INSERT INTO USER VALUES (1, 'jaenyeong')";
+            jdbcTemplate.execute(insertSql);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    ```

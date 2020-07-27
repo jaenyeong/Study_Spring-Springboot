@@ -13,6 +13,10 @@ spring:
   output:
     ansi:
       enabled: always
+  # H2 콘솔
+  h2:
+    console:
+      enabled: true
 
 server:
   # 무작위 포트 설정 (무작위 포트 번호 설정시 random 변수 사용 금지)
@@ -50,8 +54,8 @@ logging:
   file:
     path: logs
   level:
-#    org:
-#      springframework: debug
+    org:
+      springframework: info
     com:
       jaenyeong: debug
   config: classpath:log4j2-spring.yaml
