@@ -145,6 +145,9 @@ dependencies {
     // MySQL 커넥터 (MySQL 버전에 따라 5.* 버전 에러)
 //    implementation group: 'MySQL', name: 'mysql-connector-java', version: '5.1.40'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+
+    // PostgreSql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
 }
 
 test {

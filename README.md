@@ -1389,3 +1389,36 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 * MySQL 라이센스 (GPL) 주의
   * MySQL 대신 MariaDB 사용 검토
   * 소스 코드 공개 의무 여부 확인
+
+#### PostgreSQL
+* 의존성 추가
+  * ``` implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14' ```
+
+* PostgreSql 추가 (도커 사용)
+  * ```
+    docker run -p 5432:5432 -e POSTGRES_PASSWORD=pass -e \
+    POSTGRES_USER=jaenyeong -e POSTGRES_DB=springboot --name postgres_boot -d postgres
+    ```
+  * ``` docker exec -i -t postgres_boot bash ```
+  * ``` su - postgres ```
+  * ``` psql springboot ```
+    * 에러 발생시
+      * ``` psql --username jaenyeong --dbname springboot ```
+  * 데이터베이스 조회
+    ``` \list ```
+  * 테이블 조회
+    ``` \dt ```
+
+* PostgreSql용 Datasource 설정
+  * spring.datasource.type = com.zaxxer.hikari.HikariDataSource
+  * spring.datasource.hikari.driver-class-name = org.postgresql.Driver
+  * spring.datasource.hikari.maximum-pool-size = 4
+  * spring.datasource.url = jdbc:postgresql://localhost:5432/springboot?useSSL=false&allowPublicKeyRetrieval=true
+  * spring.datasource.username = jaenyeong
+  * spring.datasource.password = pass
+
+* PostgreSql 에러
+  * 경고 문구
+    * ``` org.postgresql.jdbc.PgConnection.crateClob() is not yet implemented ```
+  * 해결 설정 (application.properties(yaml))
+    * spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true

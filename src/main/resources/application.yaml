@@ -20,9 +20,11 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.postgresql.Driver
       maximum-pool-size: 4
-    url: jdbc:mysql://localhost:3306/springboot?useSSL=false&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://localhost:3306/springboot?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:postgresql://localhost:5432/springboot?useSSL=false&allowPublicKeyRetrieval=true
     username: jaenyeong
     password: pass
 
