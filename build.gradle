@@ -38,6 +38,7 @@ configurations {
     // log4j2 사용시 전체에서 기존 로깅 의존성을 제거
     all {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude module: 'spring-boot-starter-tomcat'
     }
 }
 
@@ -59,12 +60,12 @@ dependencies {
 
     // [자동 설정] - 메이븐 로컬 저장소로 스프링부트 커스터마이징 설정파일 아티팩트 추출시 스프링 의존성 주석처리
     implementation('org.springframework.boot:spring-boot-starter-web') {
-        // 톰캣 제거
-        exclude module: 'spring-boot-starter-tomcat'
+        // 톰캣 제거 (configurations exclude 설정)
+//        exclude module: 'spring-boot-starter-tomcat'
 //        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 
-        // loggig 제거
-        exclude module: 'spring-boot-starter-logging'
+        // loggig 제거 (configurations exclude 설정)
+//        exclude module: 'spring-boot-starter-logging'
     }
     // 톰캣을 제거 하고 제티(jetty)
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '2.3.1.RELEASE'
@@ -74,8 +75,8 @@ dependencies {
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-        // 테스트를 위해 loggig 제거
-        exclude module: 'spring-boot-starter-logging'
+        // 테스트를 위해 loggig 제거 (configurations exclude 설정)
+//        exclude module: 'spring-boot-starter-logging'
     }
 
     // Spring Data JPA
@@ -107,7 +108,8 @@ dependencies {
 
     // 테스트에서 WebTestClient 사용
     implementation('org.springframework.boot:spring-boot-starter-webflux') {
-        exclude module: 'spring-boot-starter-logging'
+        // 테스트를 위해 loggig 제거 (configurations exclude 설정)
+//        exclude module: 'spring-boot-starter-logging'
     }
 
     // Spring boot devtools
@@ -132,7 +134,6 @@ dependencies {
     testImplementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.42.0'
 
     // Spring HATEOAS
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-hateoas
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
 }
 

@@ -28,10 +28,10 @@ server:
     keyAlias: spring
   http2:
     enabled: true
-  # undertow http 포트 설정
-  http:
-    port: 8888
-    interface: 0.0.0.0
+
+# undertow http 포트 설정
+undertowPort: 8888
+undertowInterface: 0.0.0.0
 
 # 테스트 시 test/resources 경로에 있는 application.properties(yaml) 파일과 동일하게 맞춰줄 것
 jaenyeong:

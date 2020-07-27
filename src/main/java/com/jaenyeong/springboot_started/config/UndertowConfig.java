@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UndertowConfig {
 
-	@Value("${server.http.port}")
+	@Value("${undertowPort}")
 	private int httpPort;
 
-	@Value("${server.http.interface}")
+	@Value("${undertowInterface}")
 	private String httpInterface;
 
 	@Bean

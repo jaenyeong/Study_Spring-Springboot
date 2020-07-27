@@ -1211,3 +1211,48 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         return entityModel;
     }
     ```
+
+#### CORS
+* SOP과 CORS
+  * Single-Origin Policy
+    * 기본 정책
+    * 동일 오리진 리소스를 송수신하는 정책
+  * Cross-Origin Resource Sharing
+    * 다른 오리진 간에 리소스를 송수신(공유)하는 표준 기술
+  * Origin
+    * URI 스키마 (http, https 등)
+    * hostname (jaenyeong.com, localhost 등)
+    * 포트 (8080, 8443 등)
+
+* 스프링 MVC @CrossOrigin (둘 중 하나 선택)
+  1) @Controller나 @RequestMapping에 추가
+    * ```
+      @CrossOrigin(origins = "http://locahost:8888")
+      @GetMapping("/cors/controller")
+      public String hello() {
+          return "Cors Hello";
+      }
+      ```
+  2) WebMvcConfigurer 사용해서 글로벌 설정
+    * ```
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+          registry.addMapping("/**").allowedOrigins("http://localhost:8080");
+      }
+      ```
+
+* 요청 테스트
+  * ```
+    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(function() {
+            $.ajax("http://localhost:8888/cors/hello")
+                .done(function(msg) {
+                    alert(msg);
+                })
+                .fail(function() {
+                    alert("fail");
+                });
+        })
+    </script>
+    ```
