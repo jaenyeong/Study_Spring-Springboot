@@ -1510,3 +1510,56 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 
 * 참조
   * 스크립트 파일에서 DML을 실행할 수도 있음
+
+#### Redis
+* 캐시, 메시지 브로커, 키/밸류 스토어 등으로 사용 가능
+
+* 의존성 추가
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.2.RELEASE'
+    ```
+
+* Redis 설치 및 실행 (도커)
+  * ``` docker run -p 6379:6379 --name redis_boot -d redis ```
+  * ``` docker exec -i -t redis_boot redis-cli ```
+
+* Spring Data Redis
+  * StringRedisTemplate 또는 RedisTemplate
+  * extends CrudRepository
+
+* 주요 커맨드
+  * keys *
+    * 모든 키 확인
+  * get {key}
+    * 해당 키에 저장된 값을 가져옴
+  * hgetall {key}
+    * 해당 키의 저장된 모든 필드와 값을 가져옴
+  * hget {key} {column}
+    * 해시 키는 일반 get 명령으로 가져올 수 없음
+    * 키 필드에 저장된 값을 가져옴
+  * 결과 콘솔
+    * ```
+      127.0.0.1:6379> keys *
+      1) "jaenyeong"
+      2) "accounts"
+      3) "spring_boot"
+      4) "accounts:88844d80-8059-451c-81fd-87d0f3aca79a"
+      5) "Hello"
+      127.0.0.1:6379> get accounts:88844d80-8059-451c-81fd-87d0f3aca79a
+      (error) WRONGTYPE Operation against a key holding the wrong kind of value
+      127.0.0.1:6379> hget accounts:88844d80-8059-451c-81fd-87d0f3aca79a email
+      "jaenyeong.dev@gmail.com"
+      127.0.0.1:6379> hgetall accounts:88844d80-8059-451c-81fd-87d0f3aca79a
+      1) "_class"
+      2) "com.jaenyeong.springboot_started.redis.Account"
+      3) "id"
+      4) "88844d80-8059-451c-81fd-87d0f3aca79a"
+      5) "userName"
+      6) "jaenyeong"
+      7) "email"
+      8) "jaenyeong.dev@gmail.com"
+      127.0.0.1:6379>
+      ```
+
+* 커스터마이징 (application.properties(yaml) 파일 설정)
+  * spring.redis.*

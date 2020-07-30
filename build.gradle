@@ -151,6 +151,9 @@ dependencies {
 
     // DB Migration Tool flywaydb
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.2'
+
+    // Redis
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
 }
 
 test {
