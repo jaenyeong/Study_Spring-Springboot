@@ -1563,3 +1563,28 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 
 * 커스터마이징 (application.properties(yaml) 파일 설정)
   * spring.redis.*
+
+#### MongoDB
+* MongoDB는 JSON 기반 Document Database
+  * 스키마가 존재하지 않음
+
+* 의존성 추가
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.3.2.RELEASE'
+    ```
+
+* MongoDB 설치 및 실행 (도커)
+  * ``` docker run -p 27017:27017 --name mongo_boot -d mongo ```
+  * ``` docker exec -i -t mongo_boot bash ```
+  * ``` mongo ```
+
+* Spring Data MongoDB
+  * MongoTemplate
+  * MongoRepository
+  * 내장형 MongoDB (테스트용)
+    * 의존성 추가
+      * ```
+        testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
+        ```
+    * 테스트시엔 테스트 몽고 DB를 사용하여 운영에 영향을 끼치지 않음
+  * @DataMongoTest

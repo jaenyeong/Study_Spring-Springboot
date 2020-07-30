@@ -154,6 +154,10 @@ dependencies {
 
     // Redis
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
+
+    // Data MongoDB
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
+    testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
 }
 
 test {

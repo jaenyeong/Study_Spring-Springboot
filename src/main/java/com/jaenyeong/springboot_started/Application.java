@@ -7,10 +7,16 @@ package com.jaenyeong.springboot_started;
 //import org.springframework.boot.Banner;
 
 import com.jaenyeong.springboot_started.auto_configure.HolomanProperties;
+import com.jaenyeong.springboot_started.mongo_db.Account;
+import com.jaenyeong.springboot_started.mongo_db.MongoAccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 // 톰캣 사용시
 //import org.apache.catalina.connector.Connector;
@@ -40,6 +46,31 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(HolomanProperties.class)
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
+
+	@Autowired
+	MongoTemplate mongoTemplate;
+
+	@Autowired
+	MongoAccountRepository mongoAccountRepository;
+
+	@Bean
+	public ApplicationRunner applicationRunner() {
+		return args -> {
+			Account account = new Account();
+//			account.setEmail("jaenyeong.dev@gmail.com");
+//			account.setUserName("jaenyeong");
+//
+//			mongoTemplate.insert(account);
+
+			account.setEmail("test@gmail.com");
+			account.setUserName("TEST");
+
+			mongoAccountRepository.insert(account);
+
+			// 성공여부 확인
+			System.out.println("MongoDB finished");
+		};
+	}
 
 	// 외부, 서드파티에 프로퍼티 설정이 있는 경우
 //	@ConfigurationProperties("server")
