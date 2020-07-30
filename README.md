@@ -1459,3 +1459,18 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * @SpringBootTest (통합 테스트)
     * 모든 빈이 등록되기 때문에 postgres를 사용하게 됨
     * 해당 DB 접속 정보 등을 참조하여 postgres를 선택하기 때문
+
+#### Database init
+* JPA를 사용한 데이터베이스 초기화 (application.properties(yaml) 설정)
+  * 개발시 사용
+    * spring.jpa.hibernate.ddl-auto=create
+    * spring.jpa.generate-dll=true
+      * 해당 설정시 동작함
+  * 운영시 사용
+    * spring.jpa.hibernate.ddl-auto=validate
+    * spring.jpa.generate-dll=false
+
+* SQL 스크립트를 사용한 데이터베이스 초기화
+  * schema.sql 또는 schema-${platform}.sql
+  * data.sql 또는 data-${platform}.sql
+  * ${platform} 값은 spring.datasource.platform 으로 설정 가능

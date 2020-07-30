@@ -13,6 +13,18 @@ spring:
   output:
     ansi:
       enabled: always
+  # JPA 설정
+  jpa:
+    # 개발에 사용
+#    hibernate:
+#      ddl-auto: create
+#    generate-ddl: true
+
+    # 운영시 사용
+    hibernate:
+      ddl-auto: validate
+    generate-ddl: false
+    show-sql: true
 
 # SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) 랜덤 포트 테스트시 서버 설정 주석
 #server:
@@ -43,8 +55,8 @@ logging:
   file:
     path: logs
   level:
-    #    org:
-    #      springframework: debug
+    org:
+      springframework: info
     com:
       jaenyeong: info
   config: classpath:log4j2-spring.yaml

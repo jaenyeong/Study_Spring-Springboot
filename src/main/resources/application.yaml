@@ -27,6 +27,18 @@ spring:
     url: jdbc:postgresql://localhost:5432/springboot?useSSL=false&allowPublicKeyRetrieval=true
     username: jaenyeong
     password: pass
+  # JPA 설정
+  jpa:
+#    # 개발에 사용
+#    hibernate:
+#      ddl-auto: create
+#    generate-ddl: false
+
+    # 운영시 사용
+#    hibernate:
+#      ddl-auto: validate
+#    generate-ddl: false
+    show-sql: true
 
 server:
   # 무작위 포트 설정 (무작위 포트 번호 설정시 random 변수 사용 금지)
