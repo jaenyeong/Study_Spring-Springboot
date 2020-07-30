@@ -1471,6 +1471,42 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     * spring.jpa.generate-dll=false
 
 * SQL 스크립트를 사용한 데이터베이스 초기화
-  * schema.sql 또는 schema-${platform}.sql
+  * back-schema.sql 또는 schema-${platform}.sql
   * data.sql 또는 data-${platform}.sql
   * ${platform} 값은 spring.datasource.platform 으로 설정 가능
+
+#### Database migration
+* 대표적 마이그레이션 툴
+  * Flyway (예제에서 사용)
+  * Liquibase
+
+* 의존성 추가
+  * ``` implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.2' ```
+
+* 마이그레이션 디렉토리 (application.properties(yaml) 파일 설정)
+  * db/migration 또는 db/migration/{vendor}
+    * spring.flyway.locations로 변경 가능
+  * spring.flyway.locations=classpath:db/migration
+    * 예제에서는 아무설정을 하지 않을시 기본적으로 찾지 못하여 아래와 같이 직접 경로 설정
+  * spring.flyway.baseline-on-migrate= true
+
+* 마이그레이션 파일명
+  * V숫자__이름.sql
+    * 예제에서 파일명은 V1__init.sql
+  * V는 꼭 대문자로
+  * 숫자는 순차적으로 (타임스탬프 권장)
+  * 숫자와 이름 사이에 언더바 두 개
+  * 이름은 가능한 서술적으로
+
+* flyway 추가 및 설정 후 아래 설정과 같이 테스트
+  * spring.jpa.hibernate.ddl-auto=validate
+  * spring.jpa.generate-dll=false
+
+* 성공시
+  * flyway_schema_history 테이블 설명
+
+* 주의
+  * 한 번 적용이 된 스크립트 파일은 절대로 두 번 다시 수정하지 말 것
+
+* 참조
+  * 스크립트 파일에서 DML을 실행할 수도 있음

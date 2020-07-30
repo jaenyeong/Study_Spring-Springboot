@@ -35,10 +35,15 @@ spring:
 #    generate-ddl: false
 
     # 운영시 사용
-#    hibernate:
-#      ddl-auto: validate
-#    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    generate-ddl: false
     show-sql: true
+
+  # flyway 설정
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
 
 server:
   # 무작위 포트 설정 (무작위 포트 번호 설정시 random 변수 사용 금지)

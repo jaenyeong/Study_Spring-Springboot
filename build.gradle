@@ -148,6 +148,9 @@ dependencies {
 
     // PostgreSql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
+
+    // DB Migration Tool flywaydb
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.2'
 }
 
 test {

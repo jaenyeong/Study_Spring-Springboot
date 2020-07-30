@@ -26,6 +26,11 @@ spring:
     generate-ddl: false
     show-sql: true
 
+  # flyway 설정
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
 # SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) 랜덤 포트 테스트시 서버 설정 주석
 #server:
 #  # 무작위 포트 설정
