@@ -29,6 +29,9 @@ spring:
 #  http2:
 #    enabled: true
 
+undertowPort: 8888
+undertowInterface: 0.0.0.0
+
 jaenyeong:
   name: testJaenyeong
   age: 77777

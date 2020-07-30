@@ -81,7 +81,7 @@ dependencies {
     }
 
     // Spring Data JPA
-//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
     // [버전 명시]
     // 스프링에서 버전을 관리하지 않기 때문에 버전을 직접 명시해줘야 함

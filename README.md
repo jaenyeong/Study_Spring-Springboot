@@ -1422,3 +1422,40 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     * ``` org.postgresql.jdbc.PgConnection.crateClob() is not yet implemented ```
   * 해결 설정 (application.properties(yaml))
     * spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
+#### Spring Data JPA
+* ORM(Object-Relational Mapping), JPA (Java Persistence API)
+  * 객체와 릴레이션을 맵핑할 때 발생하는 개념적(패러다임) 불일치를 해결하는 프레임워크
+  * http://hibernate.org/orm/what-is-an-orm/
+  * JPA: ORM을 위한 자바 (EE) 표준
+
+* 스프링 데이터 JPA
+  * Repository 빈 자동 생성
+  * 쿼리 메소드 자동 구현
+  * @EnableJpaRepositories
+    * 스프링 부트가 자동으로 설정
+  * Spring Data JPA -> JPA -> Hibernate -> Datasource
+
+* 의존성 추가
+  * ``` implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa' ```
+
+* 도커 실행
+  * 도커 실행중인 컨테이너 확인
+    * ``` docker ps ``` 
+  * 기존 postgres 컨테이너 삭제 후 새 컨테이너 생성하여 실행
+    * 실행중인 postgres 컨테이너 실행 중지
+      * ``` docker stop postgres_boot ```
+    * 해당 컨테이너 삭제
+      * ``` docker rm postgres_boot ```
+    * 새 컨테이너 생성 후 실행
+      * ```
+        docker run -p 5432:5432 -e POSTGRES_PASSWORD=pass -e \
+        POSTGRES_USER=jaenyeong -e POSTGRES_DB=springboot --name postgres_boot -d postgres
+        ```
+
+* 테스트시 사용하는 DB 차이
+  * @DataJpaTest (슬라이싱 테스트)
+    * H2 사용됨
+  * @SpringBootTest (통합 테스트)
+    * 모든 빈이 등록되기 때문에 postgres를 사용하게 됨
+    * 해당 DB 접속 정보 등을 참조하여 postgres를 선택하기 때문
