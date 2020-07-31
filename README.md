@@ -1741,3 +1741,39 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
           return PasswordEncoderFactories.createDelegatingPasswordEncoder();
       }
       ```
+
+### Spring Rest Client
+* 스프링 프레임워크에서 제공해주는 것
+  * 부트는 단지 필요한 빈을 등록시켜줌
+  * 아래에 객체 자체가 아닌 객체에 빌더를 빈으로 등록 시켜주기 때문에 사용시 빌드하여 객체를 사용
+
+#### RestTemplate, WebClient (둘의 근본적인 차이는 동기 요청과 비동기 요청)
+* RestTemplate
+  * Blocking I/O 기반의 Synchronous API
+  * RestTemplateAutoConfiguration
+  * 프로젝트에 spring-web 모듈이 있다면 RestTemplateBuilder를 빈으로 등록
+
+* WebClient
+  * Non-Blocking I/O 기반의 Asynchronous API
+  * WebClientAutoConfiguration
+  * 프로젝트에 spring-webflux 모듈이 있다면 WebClient.Builder를 빈으로 등록
+
+#### Customizing
+* RestTemplate
+  * 기본으로 java.net.HttpURLConnection 사용
+    * Apache HttpClient로 변경
+      * 의존성 추가
+        * ``` implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12' ```
+  * 커스터마이징
+    * 로컬 커스터마이징
+    * 글로벌 커스터마이징
+      * RestTemplateCustomizer
+      * 빈 재정의
+
+* WebClient
+  * 기본으로 Reactor Netty의 HTTP 클라이언트 사용
+  * 커스터마이징
+    * 로컬 커스터마이징
+    * 글로벌 커스터마이징
+      * WebClientCustomizer
+      * 빈 재정의
