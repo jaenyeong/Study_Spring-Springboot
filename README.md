@@ -1622,3 +1622,122 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
 * 컴포넌트, 레퍼지토리 작명시 참고
   * 다른 의존성(모듈)을 통한 별개의 어노테이션을 사용하여도 @Autowired를 못하는 경우 많음
   * 따라서 가급적이면 다른 클래스명을 사용할 것
+
+### Spring Security
+
+#### spring-boot-starter-security
+* 스프링 시큐리티
+  * 웹 시큐리티
+  * 메소드 시큐리티
+  * 다양한 인증 방법 지원
+    * LDAP, 폼 인증, Basic 인증, OAuth, 기타
+  * 모든 요청이 인증을 요구하게 됨
+  * 폼 인증, Basic 인증 둘다 적용됨
+    * Basic 인증은 Accept 헤더에 따라 달라짐
+
+* 의존성 추가
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.2.RELEASE'
+    ```
+
+* 스프링 부트 시큐리티 자동 설정
+  * SecurityAutoConfiguration
+    * 이벤트 퍼블리셔가 등록되어 있음
+    * SpringBootWebSecurityConfiguration
+      * WebSecurityConfigurerAdapter 클래스 없는 경우 사용됨
+      * 실질적으로 하는 것이 없음
+      * 폼 인증, Basic 인증 그리고 모든 경로에 권한이 필요하다고 정의해줌
+  * UserDetailsServiceAutoConfig
+    * 앱 실행시 시큐리티에서 로그인 폼에 입력해야 할 계정 정보 제공
+      * ``` Using generated security password: a00f0084-2fe4-45ba-bc46-5b9a20f9cc1d ```
+    * AuthenticationManager 또는 AuthenticationProvider가 없는 경우 사용됨
+  * spring-boot-starter-security
+    * 스프링 시큐리티 5.* 의존성 추가
+  * 모든 요청에 인증 필요
+  * 기본 사용자 생성
+    * Username
+      * user
+    * Password
+      * 애플리케이션을 실행할 때 마다 랜덤 값 생성 (콘솔에 출력됨)
+    * application.properties(yaml) 파일 설정
+      * spring.security.user.name
+      * spring.security.user.password
+ * 인증 관련 각종 이벤트 발생
+   * DefaultAuthenticationEventPublisher 빈 등록
+   * 다양한 인증 에러 핸들러 등록 가능
+
+* index 페이지 경우 static 경로에 파일이 먼저 로딩
+  * static 경로에 없으면 templates 경로에 index 파일이 로딩됨
+
+* 테스트시 mongoTemplate bean autowired 에러 발생시
+  * @AutoConfigureDataMongo (또는 @MockBean private MongoTemplate mongoTemplate;)
+
+* 예제
+  * 시큐리티 적용시 바로 테스트 에러
+    * 인증 정보가 없을 때 응답이 accept 헤더에 따라 달라짐
+    * 테스트에서 accept를 MediaType.TEXT_HTML 타입으로 지정한 경우 302 에러
+  * 시큐리티의 입력 폼 로그인 정보
+    * User
+      * user
+    * Password
+      * 앱 실행시 시큐리티에서 로그인 폼에 입력해야 할 계정 정보 제공
+        * ``` Using generated security password: a00f0084-2fe4-45ba-bc46-5b9a20f9cc1d ```
+  * 에러 해결
+    * 의존성 추가
+      * ```
+        testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.3.3.RELEASE'
+        ```
+    * @WithMockUser 어노테이션 태깅하여 유저 정보 대신 사용
+
+* 자동 설정 사용하지 않고 모방하여 직접 설정
+  * ```
+    @Configuration
+    public class WebSecurityConfig extends WebSecurityConfigurerAdapter
+    ```
+
+#### Customizing Security Setting
+* 웹 시큐리티 설정
+  * ```
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/", "/hello")
+                .permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .httpBasic();
+    }
+    ```
+
+* UserDetailsService 인터페이스 구현
+  * ```
+    @Service
+    public class SecurityAccountService implements UserDetailsService {
+    	@Override
+    	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    		Optional<SecurityAccount> byUserName = accountRepository.findByUserName(username);
+    		SecurityAccount securityAccount = byUserName.orElseThrow(() -> new UsernameNotFoundException(username));
+    		return new User(securityAccount.getUserName(), securityAccount.getPassword(), authorities());
+    	}
+    
+    	private Collection<? extends GrantedAuthority> authorities() {
+    		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+    	}
+    }
+    ```
+
+* PasswordEncoder 설정 및 사용
+  * There is no PasswordEncoder mapped for the id "null" 에러 발생
+  * (noop)password 경우에 인코딩을 하지 않음
+  * WebSecurityConfig 파일에 추가 설정
+    * ```
+      @Bean
+      public PasswordEncoder passwordEncoder() {
+          // 비밀번호 인코딩을 처리 하지 않기 때문에 운영에 절대 사용하지 말 것
+      //  return NoOpPasswordEncoder.getInstance();
+      
+          return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+      }
+      ```

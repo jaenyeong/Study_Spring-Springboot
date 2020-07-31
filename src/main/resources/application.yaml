@@ -29,16 +29,16 @@ spring:
     password: pass
   # JPA 설정
   jpa:
-#    # 개발에 사용
-#    hibernate:
-#      ddl-auto: create
-#    generate-ddl: false
+    # 개발에 사용
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: false
 
     # 운영시 사용
-    hibernate:
-      ddl-auto: validate
-    generate-ddl: false
-    show-sql: true
+#    hibernate:
+#      ddl-auto: validate
+#    generate-ddl: false
+#    show-sql: true
 
   # flyway 설정
   flyway:

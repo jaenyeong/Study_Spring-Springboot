@@ -164,6 +164,11 @@ dependencies {
 
     // Neo4j -> commons-lang3 의존성 필요로 인해 implementation으로 변경
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j'
+
+    // Spring Security
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    // Spring Security 테스트
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 }
 
 test {
