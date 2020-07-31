@@ -129,7 +129,10 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
 
     // HtmlUnit 추가시 Could not find commons-lang3-3.10.jar 에러로 인해 의존성 추가
-    testImplementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+//    testImplementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+    // Neo4j 추가시 의존성 필요로 하여 implementation으로 변경
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+
     // HtmlUnit
     testImplementation group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.42.0'
     testImplementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.42.0'
@@ -158,6 +161,9 @@ dependencies {
     // Data MongoDB
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
     testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
+
+    // Neo4j -> commons-lang3 의존성 필요로 인해 implementation으로 변경
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j'
 }
 
 test {

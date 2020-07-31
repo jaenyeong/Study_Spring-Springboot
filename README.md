@@ -1588,3 +1588,32 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
         ```
     * 테스트시엔 테스트 몽고 DB를 사용하여 운영에 영향을 끼치지 않음
   * @DataMongoTest
+
+#### Neo4j
+* 노드간의 연관 관계를 영속화하는데 유리한 Graph Database
+  * 버전 별로 하위 호환성이 좋지 않을 수 있음
+
+* 의존성 추가
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.3.2.RELEASE'
+    ```
+
+* Neo4j 설치 및 실행 (도커)
+  * ``` docker run -p 7474:7474 -p 7687:7687 -d --name noe4j_boot neo4j ```
+  * 실행
+    * http://localhost:7474/browser
+  * 기본 로그인 정보
+    * 아이디
+      * neo4j
+    * 비밀번호
+      * neo4j
+    * 첫 접속시 비밀번호 변경 (1234)
+
+* Neo4j 설정 (application.properties(yaml)파일)
+  * spring.data.neo4j.username=neo4j
+  * spring.data.neo4j.password=1234
+
+* Spring Data Neo4J
+  * Neo4jTemplate (Deprecated)
+  * SessionFactory
+  * Neo4jRepository
