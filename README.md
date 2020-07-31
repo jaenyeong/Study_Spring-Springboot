@@ -1617,3 +1617,8 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
   * Neo4jTemplate (Deprecated)
   * SessionFactory
   * Neo4jRepository
+
+#### 정리
+* 컴포넌트, 레퍼지토리 작명시 참고
+  * 다른 의존성(모듈)을 통한 별개의 어노테이션을 사용하여도 @Autowired를 못하는 경우 많음
+  * 따라서 가급적이면 다른 클래스명을 사용할 것
