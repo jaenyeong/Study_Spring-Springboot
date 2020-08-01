@@ -51,6 +51,13 @@ spring:
       username: neo4j
       password: 1234
 
+  # Spring-Boot-Admin Client 설정
+#  boot:
+#    admin:
+#      client:
+#        # 접속할 서버의 주소
+#        url: http://localhost:8888
+
 server:
   # 무작위 포트 설정 (무작위 포트 번호 설정시 random 변수 사용 금지)
   # 권한이 없는 포트번호 또는 사용 중인 포트 번호 등을 선택할 수 있음
@@ -92,3 +99,10 @@ logging:
     com:
       jaenyeong: debug
   config: classpath:log4j2-spring.yaml
+
+# JMX + Spring-Boot-Admin Client 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

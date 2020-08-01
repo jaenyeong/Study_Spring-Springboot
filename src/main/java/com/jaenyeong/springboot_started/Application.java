@@ -44,6 +44,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 // 아래 어노테이션은 자동으로 되어 있음
 //@EnableConfigurationProperties(JaenyeongProperties.class)
 @EnableConfigurationProperties(HolomanProperties.class)
+// Spring-Boot-Admin 서버 설정
+//@EnableAdminServer
 public class Application {
 	static final String SERVLET_NAME = "helloServlet";
 

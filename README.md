@@ -1777,3 +1777,121 @@ https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/da
     * 글로벌 커스터마이징
       * WebClientCustomizer
       * 빈 재정의
+
+### Spring Boot Actuator
+* Actuator
+  * Production-ready 기능을 제공
+  * 애플리케이션의 운영 정보 제공 (종합적인 상태를 판단)
+    * 모니터링
+    * 매트릭 수집
+    * 트래픽 파악
+    * 데이터베이스 상태 파악
+    * 상용화에 필요한 통계, 상태 점검 및 외부설정 등 제공
+  * HTTP Endpoints와 JMX 빈을 통해 관리 및 모니터링 가능
+
+* 의존성 추가
+  * ```
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.3.2.RELEASE'
+    ```
+
+#### Production-ready Features
+* 애플리케이션의 각종 정보를 확인할 수 있는 Endpoints
+  * 다양한 Endpoints 제공
+    * auditevents
+      * 인증 정보(이벤트, 획득, 실패 등)
+    * beans
+      * 등록된 빈
+    * caches
+      * 사용 가능한 캐시
+    * conditions
+      * 어떠한 조건에 의해서 자동 설정이 적용 되었는지, 또 적용되지 않았는지에 대한 정보
+    * configprops
+      * @ConfigurationProperties 조합된 목록
+      * application.properties(yaml) 파일에 등록 가능한 프로퍼티
+    * env
+      * Spring ConfigurableEnvironment 안에 프로퍼티
+    * flyway
+      * 적용된 flyway (Database migration) 표시
+    * health
+      * 애플리케이션에 구동 상태
+    * httptrace
+      * 최근 100개 Http 요청
+    * info
+      * 임의의 애플리케이션 정보
+    * integrationgraph
+      * 통합 그래프
+      * spring-integration-core 의존
+    * loggers
+      * 애플리케이션이 가진 로깅 레벨 정보
+      * 로깅 레벨 정보 수정 가능
+    * liquibase
+      * 적용된 liquibase (Database migration) 표시
+    * metrics
+      * 애플리케이션에 핵심 정보 (메모리, CPU 등)
+      * 서드파티 앱에서 사용할 수 있게 포맷에 맞춰 제공
+      * 특정 수치를 조건으로 알림 수신 가능
+    * mappings
+      * 컨트롤러 맵핑 정보
+    * scheduledtasks
+      * Spring schedule task
+    * sessions
+      * Spring session
+    * shutdown
+      * 애플리케이션을 종료
+      * 기본적으로 비활성화
+    * threaddump
+      * 스레드 덤프
+  * 웹 애플리케이션인 경우
+    * heapdump
+      * hprof 덤프 파일 반환
+    * jolokia
+      * JMX 빈
+    * logfile
+      * log 파일
+    * prometheus
+      * Prometheus 서버에서 스크랩 할 수있는 형식으로 메트릭을 노출
+  * JMX (Java Management Extensions) 또는 HTTP를 통해 접근 가능
+  * shutdown을 제외한 모든 Endpoint는 기본적으로 활성화 상태
+    * 활성화, 공개 여부는 따로 관리
+    * expose를 해줘야 함
+    * JMX는 대부분 공개가 되어 있으나 웹은 health, info만 공개되어 있음
+  * 활성화 옵션 조정 (application.properties(yaml) 파일 설정)
+    * 옵트인, 옵트아웃 설정
+      * management.endpoints.enabled-by-default=false
+    * 활성화 여부
+      * management.endpoint.info.enabled=true
+
+#### JMX와 HTTP
+* JMX (Java Management Extensions)
+  * 애플리케이션/객체/장치 및 서비스 지향 네트워크 등을 감시하는 자바 API
+  * JConsole
+    * JConsole에서 애플리케이션이 접속 안되는 경우 설정 (Run Edit Configurations...)
+      * VM options
+        * -Djava.rmi.server.hostname=localhost
+  * VisualVM
+    * 기존 JVM에 포함되어 있으나 10부터 제외
+
+* HTTP
+  * /actuator
+  * health와 info를 제외한 대부분의 Endpoint가 기본적으로 비공개 상태
+  * 공개 옵션 조정
+    * management.endpoints.web.exposure.include=*
+    * management.endpoints.web.exposure.exclude=env,beans
+
+#### Spring-Boot-Admin
+* 스프링 부트가 아닌 서드파티가 제공하는 앱
+* 스프링 부트 Actuator UI 제공
+
+* Admin Server
+  * ```
+    implementation group: 'de.codecentric', name: 'spring-boot-admin-starter-server', version: '2.2.4'
+    ```
+  * @SpringBootApplication 어노테이션이 태깅된 위치에 @EnableAdminServer 어노테이션 태깅
+
+* Client
+  * ```
+    implementation group: 'de.codecentric', name: 'spring-boot-admin-starter-client', version: '2.2.4'
+    ```
+  * application.properties(yaml) 파일 설정
+    * spring.boot.admin.client.url=http://localhost:8080
+    * management.endpoints.web.exposure.include=*
